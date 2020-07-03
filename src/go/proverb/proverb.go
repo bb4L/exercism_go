@@ -1,15 +1,22 @@
-// This is a "stub" file.  It's a little start on your solution.
-// It's not a complete solution though; you have to write some code.
-
-// Package proverb should have a package comment that summarizes what it's about.
-// https://golang.org/doc/effective_go.html#commentary
 package proverb
 
-// Proverb should have a comment documenting it.
+import "fmt"
+
+// Proverb create proverb from list of strings
 func Proverb(rhyme []string) []string {
-	// Write some code here to pass the test suite.
-	// Then remove all the stock comments.
-	// They're here to help you get started but they only clutter a finished solution.
-	// If you leave them in, reviewers may protest!
-	return []string{}
+	inputSize := len(rhyme)
+	result := make([]string, inputSize)
+
+	if inputSize == 0 {
+		return result
+	}
+
+	if inputSize > 1 {
+		for i, s := range rhyme[1:] {
+			result[i] = fmt.Sprintf("For want of a %s the %s was lost.", rhyme[i], s)
+		}
+	}
+
+	result[inputSize-1] = fmt.Sprintf("And all for the want of a %s.", rhyme[0])
+	return result
 }
