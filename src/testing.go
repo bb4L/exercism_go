@@ -78,7 +78,7 @@ func runCmd(toExecute []string, errorMsg string) {
 		cmd = exec.Command(toExecute[0], toExecute[1:len(toExecute)]...)
 	}
 
-	cmd.Stdout = nil //InfoLogger.Writer()
+	cmd.Stdout = InfoLogger.Writer()
 	cmd.Stderr = ErrorLogger.Writer()
 	err := cmd.Run()
 	if err != nil {
