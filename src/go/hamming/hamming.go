@@ -5,13 +5,17 @@ import "errors"
 // Distance computes the hamming distance of a and b
 func Distance(a, b string) (int, error) {
 	distance := 0
-	if len(a) == len(b) {
-		for k := 0; k < len(a); k++ {
-			if a[k] != b[k] {
-				distance++
-			}
-		}
-		return distance, nil
+	ar := []rune(a)
+	br := []rune(b)
+
+	if len(ar) != len(br) {
+		return distance, errors.New("can not work with strings with different size")
 	}
-	return distance, errors.New("can not work with strings with different size")
+
+	for index, runeValue := range ar {
+		if runeValue != br[index] {
+			distance++
+		}
+	}
+	return distance, nil
 }
