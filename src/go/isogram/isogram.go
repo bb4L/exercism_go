@@ -8,14 +8,17 @@ import (
 // IsIsogram tests if a given string is a isogram
 func IsIsogram(text string) bool {
 	var lowerCaseText = strings.ToLower(text)
-	for _, ru := range []rune(text) {
+	var seenRunes = make(map[rune]bool)
+	for _, ru := range lowerCaseText {
 		if !unicode.IsLetter(ru) {
 			continue
 		}
 
-		if strings.IndexAny(lowerCaseText, string(ru)) != strings.LastIndexAny(lowerCaseText, string(ru)) {
+		if seenRunes[ru] {
 			return false
 		}
+
+		seenRunes[ru] = true
 	}
 	return true
 }

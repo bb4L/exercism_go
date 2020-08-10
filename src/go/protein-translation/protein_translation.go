@@ -32,9 +32,9 @@ var proteines = map[string]string{
 
 // FromCodon translates codons to Proteins
 func FromCodon(input string) (string, error) {
-	protein := proteines[input]
+	protein, existing := proteines[input]
 
-	if protein == "" {
+	if !existing {
 		return "", ErrInvalidBase
 	}
 
@@ -47,7 +47,7 @@ func FromCodon(input string) (string, error) {
 
 // FromRNA converts RNA to proteins
 func FromRNA(input string) ([]string, error) {
-	set := make(map[string]bool) // New empty set
+	set := make(map[string]struct{}) // New empty set
 	proteinList := []string{}
 
 	for i := 0; i <= len(input)-3; i += 3 {
@@ -61,12 +61,13 @@ func FromRNA(input string) ([]string, error) {
 			return proteinList, ErrInvalidBase
 		}
 
-		if set[protein] {
+		_, ok := set[protein]
+		if ok {
 			continue
 		}
 
 		proteinList = append(proteinList, protein)
-		set[protein] = true
+		set[protein] = struct{}{}
 	}
 
 	return proteinList, nil
