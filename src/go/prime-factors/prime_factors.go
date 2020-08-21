@@ -38,7 +38,7 @@ func Factors(number int64) (result []int64) {
 			}
 			remainingNumber /= i
 			result = append(result, i)
-		}
+		// }
 	}
 
 	if remainingNumber > 1 {
