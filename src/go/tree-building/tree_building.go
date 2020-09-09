@@ -30,25 +30,21 @@ func Build(data []Record) (*Node, error) {
 	m := make([]Node, len(data))
 	indices := make([]int, len(data))
 
-	for k, i := range data {
-		if i.ID != k || (i.ID < i.Parent || (i.ID == i.Parent && i.ID != 0)) || (indices[i.ID] != 0) {
-			return nil, errors.New("Incorrec structure")
+	for i, r := range data {
+		if r.ID != i || r.Parent > r.ID || r.ID > 0 && r.Parent == r.ID {
+			return nil, errors.New("Incorrect structure")
 		}
 
-		m[i.ID] = Node{ID: i.ID}
-		indices[i.ID] = k
+		m[r.ID] = Node{ID: r.ID}
+		indices[r.ID] = i
 
-	}
+		n := &m[i]
 
-	for index := range m {
-		n := &m[index]
+		parent := data[indices[i]].Parent
 
-		parent := data[indices[index]].Parent
-
-		if parent != index {
+		if parent != i {
 			m[parent].Children = append(m[parent].Children, n)
 		}
-
 	}
 
 	return &m[0], nil
