@@ -23,7 +23,6 @@ func ConvertToBase(base int, digits []int, outpuBase int) (result []int, err err
 		sum += digits[i] * int(math.Pow(float64(base), float64(length-i)))
 	}
 
-	var exp = 1
 	for {
 		if sum < outpuBase {
 			result = append([]int{sum}, result...)
@@ -33,8 +32,6 @@ func ConvertToBase(base int, digits []int, outpuBase int) (result []int, err err
 		remainder := sum % outpuBase
 		sum = sum / outpuBase
 		result = append([]int{remainder}, result...)
-
-		exp++
 	}
 	return
 }
