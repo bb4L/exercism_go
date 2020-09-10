@@ -28,7 +28,6 @@ func Build(data []Record) (*Node, error) {
 	})
 
 	m := make([]Node, len(data))
-	indices := make([]int, len(data))
 
 	for i, r := range data {
 		if r.ID != i || r.Parent > r.ID || r.ID > 0 && r.Parent == r.ID {
@@ -36,14 +35,10 @@ func Build(data []Record) (*Node, error) {
 		}
 
 		m[r.ID] = Node{ID: r.ID}
-		indices[r.ID] = i
 
-		n := &m[i]
-
-		parent := data[indices[i]].Parent
-
+		parent := r.Parent
 		if parent != i {
-			m[parent].Children = append(m[parent].Children, n)
+			m[parent].Children = append(m[parent].Children, &m[i])
 		}
 	}
 
