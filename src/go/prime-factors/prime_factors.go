@@ -26,10 +26,7 @@ func Factors(number int64) (result []int64) {
 			return
 		}
 		for {
-			if remainingNumber%i != 0 {
-				break
-			}
-			if remainingNumber <= 1 {
+			if remainingNumber%i != 0 || remainingNumber <= 1 {
 				break
 			}
 			if i == remainingNumber {
