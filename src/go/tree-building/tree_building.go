@@ -23,7 +23,7 @@ func Build(data []Record) (*Node, error) {
 		return nil, nil
 	}
 
-	sort.SliceStable(data, func(i, j int) bool {
+	sort.Slice(data, func(i, j int) bool {
 		return data[i].ID < data[j].ID
 	})
 
