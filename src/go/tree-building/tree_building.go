@@ -1,7 +1,7 @@
 package tree
 
 import (
-	"errors"
+	"fmt"
 	"sort"
 )
 
@@ -27,20 +27,20 @@ func Build(data []Record) (*Node, error) {
 		return data[i].ID < data[j].ID
 	})
 
-	m := make([]Node, len(data))
+	m := map[int]*Node{}
 
 	for i, r := range data {
 		if r.ID != i || r.Parent > r.ID || r.ID > 0 && r.Parent == r.ID {
-			return nil, errors.New("Incorrect structure")
+			return nil, fmt.Errorf("bad record: %v (out of sequence or bad parent ID)", r)
 		}
 
-		m[r.ID] = Node{ID: r.ID}
+		m[r.ID] = &Node{ID: r.ID}
 
 		parent := r.Parent
-		if parent != i {
-			m[parent].Children = append(m[parent].Children, &m[i])
+		if r.ID > 0 {
+			m[parent].Children = append(m[parent].Children, m[i])
 		}
 	}
 
-	return &m[0], nil
+	return m[0], nil
 }
