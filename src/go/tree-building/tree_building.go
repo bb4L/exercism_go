@@ -19,10 +19,6 @@ type Node struct {
 
 // Build a tree from the given records
 func Build(data []Record) (*Node, error) {
-	if len(data) == 0 {
-		return nil, nil
-	}
-
 	sort.Slice(data, func(i, j int) bool {
 		return data[i].ID < data[j].ID
 	})
@@ -36,8 +32,8 @@ func Build(data []Record) (*Node, error) {
 
 		m[r.ID] = &Node{ID: r.ID}
 
-		parent := r.Parent
 		if r.ID > 0 {
+			parent := r.Parent
 			m[parent].Children = append(m[parent].Children, m[i])
 		}
 	}
