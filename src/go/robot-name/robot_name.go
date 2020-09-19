@@ -16,7 +16,7 @@ var random = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-var names = make(map[string]int)
+var names = make(map[string]bool)
 
 func nameExists(value string) bool {
 	_, ok := names[value]
@@ -36,17 +36,17 @@ func createName() string {
 
 // Name get the name of the robot
 func (r *Robot) Name() (string, error) {
-	if r.name == "" {
-		if len(names) == 26*26*10*10*10*10 {
-			return "", errors.New("Too many robots")
-		}
-		name := createName()
-		for nameExists(name) {
-			name = createName()
-		}
-		names[name] = 1
-		r.name = name
+	if r.name != "" {
+		return r.name, nil
 	}
+	if len(names) == 26*26*10*10*10*10 {
+		return "", errors.New("Too many robots")
+	}
+	r.name = createName()
+	for names[r.name] {
+		r.name = createName()
+	}
+	names[r.name] = true
 	return r.name, nil
 }
 
