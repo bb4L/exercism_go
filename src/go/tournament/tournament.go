@@ -32,9 +32,8 @@ const header = "Team                           | MP |  W |  D |  L |  P\n"
 
 // Tally returns the table sorted by points
 func Tally(reader io.Reader, writer io.Writer) error {
-	// var teams = make(map[string]*Team)
-
 	var teams = make(map[string]*Team)
+
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		line := scanner.Text()
