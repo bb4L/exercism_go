@@ -2,8 +2,8 @@ package robotname
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
-	"strconv"
 	"time"
 )
 
@@ -13,7 +13,6 @@ type Robot struct {
 }
 
 var random = rand.New(rand.NewSource(time.Now().UnixNano()))
-
 var names = make(map[string]int)
 
 func nameExists(value string) bool {
@@ -22,24 +21,25 @@ func nameExists(value string) bool {
 }
 
 func createName() string {
-	return string(65+random.Intn(26)) + string(65+random.Intn(26)) + strconv.Itoa(random.Intn(10)) + strconv.Itoa(random.Intn(10)) + strconv.Itoa(random.Intn(10))
+	r1 := random.Intn(26) + 'A'
+	r2 := random.Intn(26) + 'A'
+	num := random.Intn(1000)
+	return fmt.Sprintf("%c%c%03d", r1, r2, num)
 }
 
 // Name get the name of the robot
 func (r *Robot) Name() (string, error) {
+	if r.name != "" {
+		return r.name, nil
+	}
 	if len(names) == 26*26*10*10*10*10 {
 		return "", errors.New("Too many robots")
 	}
-
-	// this is a special case to handle
-	if r.name == "" {
-		name := createName()
-		for nameExists(name) {
-			name = createName()
-		}
-		names[name] = 1
-		r.name = name
+	r.name = createName()
+	for names[r.name] {
+		r.name = createName()
 	}
+	names[r.name] = true
 	return r.name, nil
 }
 
