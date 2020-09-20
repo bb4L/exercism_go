@@ -30,11 +30,11 @@ func (t *Team) getString() string {
 
 const header = "Team                           | MP |  W |  D |  L |  P\n"
 
-var teams = make(map[string]*Team)
-
 // Tally returns the table sorted by points
 func Tally(reader io.Reader, writer io.Writer) error {
-	teams = make(map[string]*Team)
+	// var teams = make(map[string]*Team)
+
+	var teams = make(map[string]*Team)
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -42,7 +42,7 @@ func Tally(reader io.Reader, writer io.Writer) error {
 			continue
 		}
 
-		err := addLine(line)
+		err := addLine(teams, line)
 		if err != nil {
 			return err
 		}
@@ -69,7 +69,7 @@ func Tally(reader io.Reader, writer io.Writer) error {
 	return nil
 }
 
-func addLine(line string) error {
+func addLine(teams map[string]*Team, line string) error {
 	values := strings.Split(line, ";")
 
 	if len(values) != 3 {
