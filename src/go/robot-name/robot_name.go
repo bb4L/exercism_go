@@ -13,18 +13,11 @@ type Robot struct {
 }
 
 var random = rand.New(rand.NewSource(time.Now().UnixNano()))
-
-const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-var names = make(map[string]bool)
+var names = make(map[string]int)
 
 func nameExists(value string) bool {
 	_, ok := names[value]
 	return ok
-}
-
-func removeName(val string) {
-	// delete(names, val)
 }
 
 func createName() string {
@@ -52,6 +45,5 @@ func (r *Robot) Name() (string, error) {
 
 // Reset resets the name
 func (r *Robot) Reset() {
-	removeName(r.name)
 	r.name = ""
 }
