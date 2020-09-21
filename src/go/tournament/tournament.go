@@ -11,30 +11,31 @@ import (
 
 // Team represents a team
 type Team struct {
-	name    string
-	w, d, l int
+	name                string
+	wins, draws, losses int
 }
 
 func (t *Team) mp() int {
-	return t.w + t.d + t.l
+	return t.wins + t.draws + t.losses
 }
 
 func (t *Team) score() int {
-	return 3*t.w + t.d
+	return 3*t.wins + t.draws
 }
 
 func (t *Team) getString() string {
 	fmtString := "%-31s| %2d | %2d | %2d | %2d | %2d\n"
-	return fmt.Sprintf(fmtString, t.name, t.mp(), t.w, t.d, t.l, t.score())
+	return fmt.Sprintf(fmtString, t.name, t.mp(), t.wins, t.draws, t.losses, t.score())
 }
 
 const header = "Team                           | MP |  W |  D |  L |  P\n"
 
 // Tally returns the table sorted by points
 func Tally(reader io.Reader, writer io.Writer) error {
-	var teams = make(map[string]*Team)
+	var teams = make(map[string]Team)
 
 	scanner := bufio.NewScanner(reader)
+
 	for scanner.Scan() {
 		line := scanner.Text()
 		if line == "" || strings.HasPrefix(line, "#") {
@@ -47,7 +48,7 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		}
 	}
 
-	sortedTeams := []*Team{}
+	sortedTeams := []Team{}
 	for _, team := range teams {
 		sortedTeams = append(sortedTeams, team)
 	}
@@ -68,7 +69,7 @@ func Tally(reader io.Reader, writer io.Writer) error {
 	return nil
 }
 
-func addLine(teams map[string]*Team, line string) error {
+func addLine(teams map[string]Team, line string) error {
 	values := strings.Split(line, ";")
 
 	if len(values) != 3 {
@@ -77,34 +78,33 @@ func addLine(teams map[string]*Team, line string) error {
 
 	t1, ok := teams[values[0]]
 	if !ok {
-		t1 = new(Team)
 		t1.name = values[0]
-		teams[t1.name] = t1
 	}
 
 	t2, ok := teams[values[1]]
 	if !ok {
-		t2 = new(Team)
 		t2.name = values[1]
-		teams[t2.name] = t2
 	}
 
 	switch values[2] {
 	case "win":
-		t1.w++
-		t2.l++
+		t1.wins++
+		t2.losses++
 
 	case "draw":
-		t1.d++
-		t2.d++
+		t1.draws++
+		t2.draws++
 
 	case "loss":
-		t2.w++
-		t1.l++
+		t2.wins++
+		t1.losses++
 
 	default:
 		return errors.New("Invalid value in result")
 	}
+
+	teams[t1.name] = t1
+	teams[t2.name] = t2
 
 	return nil
 }
