@@ -13,7 +13,7 @@ type Robot struct {
 }
 
 var random = rand.New(rand.NewSource(time.Now().UnixNano()))
-var names = make(map[string]int)
+var names = make(map[string]bool)
 
 func nameExists(value string) bool {
 	_, ok := names[value]
