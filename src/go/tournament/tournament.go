@@ -15,20 +15,8 @@ type Team struct {
 	wins, draws, losses int
 }
 
-func (t *Team) mp() int {
-	return t.wins + t.draws + t.losses
-}
-
-func (t *Team) score() int {
-	return 3*t.wins + t.draws
-}
-
-func (t *Team) getString() string {
-	fmtString := "%-31s| %2d | %2d | %2d | %2d | %2d\n"
-	return fmt.Sprintf(fmtString, t.name, t.mp(), t.wins, t.draws, t.losses, t.score())
-}
-
 const header = "Team                           | MP |  W |  D |  L |  P\n"
+const fmtString = "%-31s| %2d | %2d | %2d | %2d | %2d\n"
 
 // Tally returns the table sorted by points
 func Tally(reader io.Reader, writer io.Writer) error {
@@ -42,10 +30,43 @@ func Tally(reader io.Reader, writer io.Writer) error {
 			continue
 		}
 
-		err := addLine(teams, line)
-		if err != nil {
-			return err
+		// err := addLine(teams, line)
+		values := strings.Split(line, ";")
+
+		if len(values) != 3 {
+			return errors.New("Invalid line")
 		}
+
+		t1, ok := teams[values[0]]
+		if !ok {
+			t1.name = values[0]
+		}
+
+		t2, ok := teams[values[1]]
+		if !ok {
+			t2.name = values[1]
+		}
+
+		switch values[2] {
+		case "win":
+			t1.wins++
+			t2.losses++
+
+		case "draw":
+			t1.draws++
+			t2.draws++
+
+		case "loss":
+			t2.wins++
+			t1.losses++
+
+		default:
+			return errors.New("Invalid value in result")
+		}
+
+		teams[t1.name] = t1
+		teams[t2.name] = t2
+
 	}
 
 	sortedTeams := []Team{}
@@ -54,57 +75,19 @@ func Tally(reader io.Reader, writer io.Writer) error {
 	}
 
 	sort.Slice(sortedTeams, func(i, j int) bool {
-		if sortedTeams[j].score() == sortedTeams[i].score() {
+		scoreJ := 3*sortedTeams[j].wins + sortedTeams[j].draws
+		scoreI := 3*sortedTeams[i].wins + sortedTeams[i].draws
+		if scoreI == scoreJ {
 			return sortedTeams[i].name < sortedTeams[j].name
 		}
-		return sortedTeams[j].score() < sortedTeams[i].score()
+		return scoreJ < scoreI
 	})
 
 	io.WriteString(writer, header)
 
 	for _, team := range sortedTeams {
-		io.WriteString(writer, team.getString())
+		io.WriteString(writer, fmt.Sprintf(fmtString, team.name, team.wins+team.draws+team.losses, team.wins, team.draws, team.losses, 3*team.wins+team.draws))
 	}
-
-	return nil
-}
-
-func addLine(teams map[string]Team, line string) error {
-	values := strings.Split(line, ";")
-
-	if len(values) != 3 {
-		return errors.New("Invalid line")
-	}
-
-	t1, ok := teams[values[0]]
-	if !ok {
-		t1.name = values[0]
-	}
-
-	t2, ok := teams[values[1]]
-	if !ok {
-		t2.name = values[1]
-	}
-
-	switch values[2] {
-	case "win":
-		t1.wins++
-		t2.losses++
-
-	case "draw":
-		t1.draws++
-		t2.draws++
-
-	case "loss":
-		t2.wins++
-		t1.losses++
-
-	default:
-		return errors.New("Invalid value in result")
-	}
-
-	teams[t1.name] = t1
-	teams[t2.name] = t2
 
 	return nil
 }
