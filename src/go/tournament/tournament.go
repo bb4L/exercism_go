@@ -11,8 +11,8 @@ import (
 
 // Team represents a team
 type Team struct {
-	name                string
-	wins, draws, losses int
+	name                       string
+	wins, draws, losses, score int
 }
 
 const header = "Team                           | MP |  W |  D |  L |  P\n"
@@ -37,56 +37,51 @@ func Tally(reader io.Reader, writer io.Writer) error {
 			return errors.New("Invalid line")
 		}
 
-		t1, ok := teams[values[0]]
-		if !ok {
-			t1.name = values[0]
-		}
-
-		t2, ok := teams[values[1]]
-		if !ok {
-			t2.name = values[1]
-		}
+		t1, t2 := teams[values[0]], teams[values[1]]
+		t1.name, t2.name = values[0], values[1]
 
 		switch values[2] {
 		case "win":
 			t1.wins++
+			t1.score += 3
 			t2.losses++
 
 		case "draw":
 			t1.draws++
 			t2.draws++
+			t1.score++
+			t2.score++
 
 		case "loss":
 			t2.wins++
+			t2.score += 3
 			t1.losses++
 
 		default:
 			return errors.New("Invalid value in result")
 		}
 
-		teams[t1.name] = t1
-		teams[t2.name] = t2
-
+		teams[t1.name], teams[t2.name] = t1, t2
 	}
 
-	sortedTeams := []Team{}
+	sortedTeams := make([]Team, len(teams))
+	count := 0
 	for _, team := range teams {
-		sortedTeams = append(sortedTeams, team)
+		sortedTeams[count] = team
+		count++
 	}
 
 	sort.Slice(sortedTeams, func(i, j int) bool {
-		scoreJ := 3*sortedTeams[j].wins + sortedTeams[j].draws
-		scoreI := 3*sortedTeams[i].wins + sortedTeams[i].draws
-		if scoreI == scoreJ {
+		if sortedTeams[i].score == sortedTeams[j].score {
 			return sortedTeams[i].name < sortedTeams[j].name
 		}
-		return scoreJ < scoreI
+		return sortedTeams[j].score < sortedTeams[i].score
 	})
 
 	io.WriteString(writer, header)
 
 	for _, team := range sortedTeams {
-		io.WriteString(writer, fmt.Sprintf(fmtString, team.name, team.wins+team.draws+team.losses, team.wins, team.draws, team.losses, 3*team.wins+team.draws))
+		fmt.Fprintf(writer, fmtString, team.name, team.wins+team.draws+team.losses, team.wins, team.draws, team.losses, team.score)
 	}
 
 	return nil
