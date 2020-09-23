@@ -15,9 +15,6 @@ type Team struct {
 	wins, draws, losses, score int
 }
 
-const header = "Team                           | MP |  W |  D |  L |  P\n"
-const fmtString = "%-31s| %2d | %2d | %2d | %2d | %2d\n"
-
 // Tally returns the table sorted by points
 func Tally(reader io.Reader, writer io.Writer) error {
 	var teams = make(map[string]Team)
@@ -64,11 +61,10 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		teams[t1.name], teams[t2.name] = t1, t2
 	}
 
-	sortedTeams := make([]Team, len(teams))
-	count := 0
+	sortedTeams := make([]Team, 0, len(teams))
+
 	for _, team := range teams {
-		sortedTeams[count] = team
-		count++
+		sortedTeams = append(sortedTeams, team)
 	}
 
 	sort.Slice(sortedTeams, func(i, j int) bool {
@@ -78,10 +74,10 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		return sortedTeams[j].score < sortedTeams[i].score
 	})
 
-	io.WriteString(writer, header)
+	fmt.Fprintln(writer, "Team                           | MP |  W |  D |  L |  P")
 
 	for _, team := range sortedTeams {
-		fmt.Fprintf(writer, fmtString, team.name, team.wins+team.draws+team.losses, team.wins, team.draws, team.losses, team.score)
+		fmt.Fprintf(writer, "%-31s| %2d | %2d | %2d | %2d | %2d\n", team.name, team.wins+team.draws+team.losses, team.wins, team.draws, team.losses, team.score)
 	}
 
 	return nil
