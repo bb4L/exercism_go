@@ -32,7 +32,9 @@ func (r *Robot) Name() (string, error) {
 	if r.name != "" {
 		return r.name, nil
 	}
-	if len(names) == 26*26*10*10*10*10 {
+
+	if len(names) == 26*26*10*10*10 {
+
 		return "", errors.New("Too many robots")
 	}
 	r.name = createName()
