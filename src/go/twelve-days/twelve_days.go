@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-var verses = [12]string{
+var verses = []string{
 	"On the first day of Christmas my true love gave to me: a Partridge in a Pear Tree.",
 	"On the second day of Christmas my true love gave to me: two Turtle Doves, and a Partridge in a Pear Tree.",
 	"On the third day of Christmas my true love gave to me: three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.",
@@ -21,7 +21,7 @@ var verses = [12]string{
 
 // Song returns the whole song
 func Song() string {
-	return strings.Join(verses[:], "\n")
+	return strings.Join(verses, "\n")
 }
 
 // Verse returns the verse
