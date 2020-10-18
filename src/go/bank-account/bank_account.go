@@ -4,7 +4,7 @@ import "sync"
 
 // Account bank account
 type Account struct {
-	sync.Mutex
+	sync.RWMutex
 	closed  bool
 	balance int64
 }
@@ -14,7 +14,7 @@ func Open(initialDeposit int64) *Account {
 	if initialDeposit < 0 {
 		return nil
 	}
-	return &Account{sync.Mutex{}, false, initialDeposit}
+	return &Account{balance: initialDeposit}
 }
 
 // Close closes an account
@@ -24,10 +24,11 @@ func (a *Account) Close() (payout int64, ok bool) {
 
 	if a.closed {
 		payout, ok = 0, false
-	} else {
-		a.closed = true
-		payout, ok = a.balance, true
+		return
 	}
+
+	a.closed = true
+	payout, ok = a.balance, true
 	return
 }
 
@@ -38,10 +39,10 @@ func (a *Account) Balance() (balance int64, ok bool) {
 
 	if a.closed {
 		balance, ok = 0, false
-	} else {
-		balance, ok = a.balance, true
+		return
 	}
 
+	balance, ok = a.balance, true
 	return
 }
 
@@ -52,10 +53,10 @@ func (a *Account) Deposit(amount int64) (balance int64, ok bool) {
 
 	if a.balance+amount < 0 || a.closed {
 		balance, ok = 0, false
-	} else {
-		a.balance += amount
-		balance, ok = a.balance, true
+		return
 	}
 
+	a.balance += amount
+	balance, ok = a.balance, true
 	return
 }
