@@ -34,8 +34,8 @@ func (a *Account) Close() (payout int64, ok bool) {
 
 // Balance retrieves the balance of an account
 func (a *Account) Balance() (balance int64, ok bool) {
-	a.Lock()
-	defer a.Unlock()
+	a.RLock()
+	defer a.RUnlock()
 
 	if a.closed {
 		balance, ok = 0, false
