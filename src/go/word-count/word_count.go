@@ -1,8 +1,8 @@
 package wordcount
 
 import (
-	"regexp"
 	"strings"
+	"unicode"
 )
 
 // Frequency represents a frequency map
@@ -11,9 +11,9 @@ type Frequency map[string]int
 // WordCount returns a Frequency for the input given
 func WordCount(input string) Frequency {
 	frequency := make(map[string]int)
-	reg, _ := regexp.Compile("[^A-Za-z0-9']+")
 
-	for _, word := range strings.Fields(reg.ReplaceAllString(input, " ")) {
+	inline := func(r rune) bool { return !(unicode.IsLetter(r) || unicode.IsNumber(r) || r == '\'') }
+	for _, word := range strings.FieldsFunc(input, inline) {
 		lowerWord := strings.Trim(strings.ToLower(word), "'")
 		val, ok := frequency[lowerWord]
 		if ok {
