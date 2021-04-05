@@ -2,23 +2,20 @@ echo "TEST ALL"
 one_failed=0
 for dir in src/go/*/
 do     
-    echo ${dir}
-
-    src/testing ${dir}
+    ./testing ${dir}
 
     if [ $? -eq 0 ]; then
-        echo OK
+        echo ""
     else
         echo FAIL
         one_failed=1
     fi
 done
-echo "DONE"
 
 if [ $one_failed -eq 1 ]; then
-    echo "failed"
+    echo "FAILED"
     exit 1
 else
-    echo "not failed"
+    echo "NOT FAILED"
     exit 0
 fi

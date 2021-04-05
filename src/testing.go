@@ -30,8 +30,6 @@ func init() {
 func main() {
 	argsWithoutProg := os.Args[1:]
 
-	InfoLogger.Printf("starting with %s", argsWithoutProg)
-
 	if len(argsWithoutProg) != 1 {
 		FatalLogger.Fatalln("wrong number of arguments, exactly 1 is needed")
 	}
@@ -43,20 +41,15 @@ func main() {
 	}
 
 	// format code
-	// InfoLogger.Printf("format code")
-
 	runFormat()
 
 	// lint code
-	// InfoLogger.Printf("lint code")
-
 	runLinting()
 
 	// run test
-	// InfoLogger.Printf("run tests")
 	runTests()
 
-	InfoLogger.Printf("[SUCCESS]")
+	// InfoLogger.Printf("[SUCCESS]")
 }
 
 func runFormat() {
