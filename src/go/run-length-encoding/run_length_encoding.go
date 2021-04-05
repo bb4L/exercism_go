@@ -1,6 +1,7 @@
 package encode
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
@@ -8,7 +9,7 @@ import (
 
 func writeRune(sb strings.Builder, r rune, n int) strings.Builder {
 	if n > 0 {
-		sb.WriteString(string(n))
+		sb.WriteString(fmt.Sprint(n))
 	}
 	sb.WriteRune(r)
 

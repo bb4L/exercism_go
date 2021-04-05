@@ -30,8 +30,6 @@ func init() {
 func main() {
 	argsWithoutProg := os.Args[1:]
 
-	InfoLogger.Printf("starting with %s", argsWithoutProg)
-
 	if len(argsWithoutProg) != 1 {
 		FatalLogger.Fatalln("wrong number of arguments, exactly 1 is needed")
 	}
@@ -43,32 +41,26 @@ func main() {
 	}
 
 	// format code
-	InfoLogger.Printf("format code")
-
 	runFormat()
 
 	// lint code
-	InfoLogger.Printf("lint code")
-
 	runLinting()
 
 	// run test
-	InfoLogger.Printf("run tests")
 	runTests()
 
-	InfoLogger.Printf("[SUCCESS]")
 }
 
 func runFormat() {
-	runCmd([]string{"/usr/local/go/bin/gofmt"}, "failed to format the code")
+	runCmd([]string{"go", "fmt"}, "failed to format the code")
 }
 
 func runLinting() {
-	runCmd([]string{"/usr/local/bin/golint"}, "failed to run golint")
+	runCmd([]string{"golint"}, "failed to run golint")
 }
 
 func runTests() {
-	runCmd([]string{"/usr/local/go/bin/go", "test"}, "tests failed")
+	runCmd([]string{"go", "test"}, "tests failed")
 }
 
 func runCmd(toExecute []string, errorMsg string) {
