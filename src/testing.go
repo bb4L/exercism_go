@@ -43,17 +43,17 @@ func main() {
 	}
 
 	// format code
-	InfoLogger.Printf("format code")
+	// InfoLogger.Printf("format code")
 
 	runFormat()
 
 	// lint code
-	InfoLogger.Printf("lint code")
+	// InfoLogger.Printf("lint code")
 
 	runLinting()
 
 	// run test
-	InfoLogger.Printf("run tests")
+	// InfoLogger.Printf("run tests")
 	runTests()
 
 	InfoLogger.Printf("[SUCCESS]")
