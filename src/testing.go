@@ -49,19 +49,18 @@ func main() {
 	// run test
 	runTests()
 
-	// InfoLogger.Printf("[SUCCESS]")
 }
 
 func runFormat() {
-	runCmd([]string{"/usr/local/go/bin/go", "fmt"}, "failed to format the code")
+	runCmd([]string{"go", "fmt"}, "failed to format the code")
 }
 
 func runLinting() {
-	runCmd([]string{"/usr/local/bin/golint"}, "failed to run golint")
+	runCmd([]string{"golint"}, "failed to run golint")
 }
 
 func runTests() {
-	runCmd([]string{"/usr/local/go/bin/go", "test"}, "tests failed")
+	runCmd([]string{"go", "test"}, "tests failed")
 }
 
 func runCmd(toExecute []string, errorMsg string) {
