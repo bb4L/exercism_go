@@ -21,6 +21,9 @@ jobs:
         with:
           go-version: 1.15
 
+      - name: Get golint
+        run: go get -u golang.org/x/lint/golint
+        
       - name: Build test programm
         run: go build src/testing.go
 

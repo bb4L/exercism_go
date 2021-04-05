@@ -53,7 +53,7 @@ func main() {
 }
 
 func runFormat() {
-	runCmd([]string{"/usr/local/go/bin/gofmt"}, "failed to format the code")
+	runCmd([]string{"/usr/local/go/bin/go", "fmt"}, "failed to format the code")
 }
 
 func runLinting() {
