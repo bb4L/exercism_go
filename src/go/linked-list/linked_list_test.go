@@ -1,19 +1,3 @@
-// API:
-//
-// type Node struct
-// type List struct
-// var ErrEmptyList
-//
-// func (e *Node) Next() *Node
-// func (e *Node) Prev() *Node
-// func NewList(args ...interface{}) *List
-// func (l *List) PushFront(v interface{})
-// func (l *List) PushBack(v interface{})
-// func (l *List) PopFront() (interface{}, error)
-// func (l *List) PopBack() (interface{}, error)
-// func (l *List) Reverse() *List
-// func (l *List) First() *Node
-// func (l *List) Last() *Node
 package linkedlist
 
 import (
@@ -92,9 +76,17 @@ func checkDoublyLinkedList(t *testing.T, ll *List, expected []interface{}) {
 
 	prev := ll.First()
 	cur := ll.First().Next()
+	counter := 0
+
 	for idx := 0; cur != nil; idx++ {
 		if !(prev.Next() == cur && cur.Prev() == prev) {
 			t.Errorf("%d-th element's links is wrong", idx)
+		}
+
+		counter++
+		if counter > 100 {
+			t.Errorf("Possible infinite loop detected and stopped. Check the .Next() implementation.")
+			return
 		}
 
 		prev = cur
@@ -111,7 +103,13 @@ func (ll *List) debugString() string {
 	buf := bytes.NewBuffer([]byte{'{'})
 	buf.WriteString(fmt.Sprintf("First()= %p; ", ll.First()))
 
+	counter := 0
+
 	for cur := ll.First(); cur != nil; cur = cur.Next() {
+		counter++
+		if counter > 100 {
+			panic("Possible infinite loop detected and stopped. Check the .Next() implementation")
+		}
 		buf.WriteString(fmt.Sprintf("[Prev()= %p, Val= %p (%v), Next()= %p] <-> ", cur.Prev(), cur, cur.Val, cur.Next()))
 	}
 
