@@ -1,9 +1,5 @@
 package allergies
 
-import (
-	"math"
-)
-
 var allergenes = map[string]uint{
 	"eggs":         1,
 	"peanuts":      2,
@@ -15,26 +11,9 @@ var allergenes = map[string]uint{
 	"cats":         128,
 }
 
-var iterationOrder = []string{
-	"cats", "pollen", "chocolate", "tomatoes", "strawberries", "shellfish", "peanuts", "eggs",
-}
-
-func Allergies(allergies uint) []string {
-	result := []string{}
-
-	if allergies > 255 {
-		k := uint(math.Pow(2, math.Floor(math.Log2(float64((allergies))))))
-
-		for ; k > 128 && allergies >= k; k /= 2 {
-			allergies -= k
-		}
-	}
-
-	for _, allergen := range iterationOrder {
-		allergenValue := allergenes[allergen]
-
-		if allergies >= allergenValue {
-			allergies -= allergenValue
+func Allergies(allergies uint) (result []string) {
+	for allergen, value := range allergenes {
+		if allergies&value == value {
 			result = append(result, allergen)
 		}
 	}
@@ -42,10 +21,5 @@ func Allergies(allergies uint) []string {
 }
 
 func AllergicTo(allergies uint, allergen string) bool {
-	for _, val := range Allergies(allergies) {
-		if val == allergen {
-			return true
-		}
-	}
-	return false
+	return allergies&allergenes[allergen] == allergenes[allergen]
 }
