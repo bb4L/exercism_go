@@ -6,42 +6,32 @@ import (
 
 // Define the Grade and School types here.
 type Grade struct {
-	grade    int
-	students []string
+	grade   int
+	studens []string
 }
 type School struct {
 	grades []Grade
 }
 
 func New() *School {
-	return &School{}
+	return &School{grades: make([]Grade, 9)}
 }
 
 func (s *School) Add(student string, grade int) {
-	for idx, val := range s.grades {
-		if val.grade == grade {
-			val.students = append(val.students, student)
-			sort.Strings(val.students)
-			s.grades[idx] = val
-			return
-		}
-	}
-	s.grades = append(s.grades, Grade{grade, []string{student}})
-
+	s.grades[grade-1].studens = append(s.grades[grade-1].studens, student)
+	s.grades[grade-1].grade = grade
+	sort.Strings(s.grades[grade-1].studens)
 }
 
 func (s *School) Grade(level int) []string {
-	for _, val := range s.grades {
-		if val.grade == level {
-			return val.students
-		}
-	}
-	return []string{}
+	return s.grades[level-1].studens
 }
 
-func (s *School) Enrollment() []Grade {
-	sort.Slice(s.grades, func(i, j int) bool {
-		return s.grades[i].grade < s.grades[j].grade
-	})
-	return s.grades
+func (s *School) Enrollment() (result []Grade) {
+	for _, grade := range s.grades {
+		if grade.grade > 0 {
+			result = append(result, grade)
+		}
+	}
+	return
 }
