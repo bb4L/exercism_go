@@ -6,10 +6,7 @@ import (
 )
 
 func Encode(message string, rails int) string {
-	var builders = []string{}
-	for i := 0; i < rails; i++ {
-		builders = append(builders, "")
-	}
+	var builders = make([]string, rails)
 	line := 0
 	change := 1
 	for i := 0; i < utf8.RuneCountInString(message); i++ {
@@ -29,10 +26,7 @@ func Encode(message string, rails int) string {
 func Decode(message string, rails int) string {
 	line := 0
 	change := 1
-	var counts = []int{}
-	for i := 0; i < rails; i++ {
-		counts = append(counts, 0)
-	}
+	var counts = make([]int, rails)
 
 	for i := 0; i < len(message); i++ {
 		counts[line] = counts[line] + 1
