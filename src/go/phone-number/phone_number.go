@@ -2,35 +2,43 @@ package phonenumber
 
 import (
 	"errors"
-	"regexp"
-	"strings"
+	"unicode"
 )
 
 func Number(phoneNumber string) (string, error) {
-	if len(phoneNumber) != len(regexp.MustCompile("[a-zA-Z]").ReplaceAllString(phoneNumber, "")) {
-		return "", errors.New("leters not permitted")
+	digits := []rune{}
+	for _, val := range phoneNumber {
+		if unicode.IsDigit(val) {
+			digits = append(digits, val)
+		} else {
+			if val == '(' || val == ')' || val == '-' || val == '.' || val == '+' || unicode.IsSpace(val) {
+				continue
+			}
+
+			if unicode.IsLetter(val) {
+				return "", errors.New("leters not permitted")
+			}
+
+			return "", errors.New("punctuations not permitted")
+		}
 	}
 
-	if len(strings.ReplaceAll(regexp.MustCompile("[0-9()-.]").ReplaceAllString(phoneNumber, ""), " ", "")) > 0 {
-		return "", errors.New("punctuations not permitted")
-	}
-
-	phoneNumber = regexp.MustCompile("[^0-9]").ReplaceAllString(phoneNumber, "")
-	numberLength := len(phoneNumber)
-	if numberLength < 10 {
+	if len(digits) < 10 {
 		return "", errors.New("incorrect number of digits")
 	}
-	if numberLength > 11 {
+
+	if len(digits) > 11 {
 		return "", errors.New("more than 11 digits")
 	}
-	if numberLength == 11 {
-		if string(phoneNumber[0]) != "1" {
+
+	if len(digits) == 11 {
+		if digits[0] != '1' {
 			return "", errors.New("11 digits must start with 1")
 		}
-		phoneNumber = phoneNumber[1:]
+		digits = digits[1:]
 	}
 
-	areaCode := phoneNumber[0]
+	areaCode := digits[0]
 	if areaCode == '0' {
 		return "", errors.New("area code cannot start with zero")
 	}
@@ -38,14 +46,14 @@ func Number(phoneNumber string) (string, error) {
 		return "", errors.New("area code cannot start with one")
 	}
 
-	exchangeCode := phoneNumber[3]
+	exchangeCode := digits[3]
 	if exchangeCode == '0' {
 		return "", errors.New("exchange code cannot start with zero")
 	}
 	if exchangeCode == '1' {
 		return "", errors.New("exchange code cannot start with one")
 	}
-	return phoneNumber, nil
+	return string(digits), nil
 }
 
 func AreaCode(phoneNumber string) (string, error) {
@@ -53,7 +61,7 @@ func AreaCode(phoneNumber string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(phoneNumber[0:3]), nil
+	return phoneNumber[0:3], nil
 }
 
 func Format(phoneNumber string) (string, error) {
@@ -61,5 +69,6 @@ func Format(phoneNumber string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// return fmt.Sprintf("(%s) %s-%s", phoneNumber[0:3], phoneNumber[3:6], phoneNumber[6:10]), nil
 	return "(" + phoneNumber[0:3] + ") " + phoneNumber[3:6] + "-" + phoneNumber[6:10], nil
 }
