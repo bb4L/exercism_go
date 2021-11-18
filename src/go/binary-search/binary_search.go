@@ -5,39 +5,40 @@ func SearchInts(list []int, key int) int {
 		return -1
 	}
 
-	idx := 0
+	startIdx := 0
 
-	if list[idx] == key {
-		return idx
+	if list[startIdx] == key {
+		return startIdx
 	}
 
-	searchRange := len(list) - 1
+	endIdx := len(list) - 1
 
-	for searchRange > 0 {
-		if list[idx] > key {
+	for startIdx <= endIdx {
+		if list[startIdx] > key {
 			return -1
 		}
 
-		middle := list[idx+(searchRange/2)]
+		middleIdx := (startIdx + endIdx) / 2
+		middle := list[middleIdx]
+
 		if middle == key {
-			return idx + searchRange/2
+			return middleIdx
 		}
 
 		if key > middle {
-			idx += searchRange / 2
-			if searchRange%2 == 1 && searchRange > 1 {
-				idx++
-				searchRange++
-			}
+			startIdx = middleIdx + 1
 		}
 
-		searchRange /= 2
+		if key < middle {
+			endIdx = middleIdx - 1
+		}
 
-		if idx >= len(list) {
+		if startIdx >= len(list) {
 			return -1
 		}
-		if list[idx] == key {
-			return idx
+
+		if list[startIdx] == key {
+			return startIdx
 		}
 	}
 
