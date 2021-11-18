@@ -4,7 +4,6 @@ func Bracket(data string) bool {
 	brackets := []rune{}
 
 	for _, b := range data {
-
 		switch b {
 		case '(', '[', '{':
 			brackets = append(brackets, b)
@@ -12,12 +11,8 @@ func Bracket(data string) bool {
 			if len(brackets) == 0 {
 				return false
 			}
-			if (b == ')' && brackets[len(brackets)-1] == '(') || (b == ']' && brackets[len(brackets)-1] == '[') || (b == '}' && brackets[len(brackets)-1] == '{') {
-				if len(brackets) == 1 {
-					brackets = []rune{}
-				} else {
-					brackets = brackets[:len(brackets)-1]
-				}
+			if areMatching(brackets[len(brackets)-1], b) {
+				brackets = brackets[:len(brackets)-1]
 			} else {
 				return false
 			}
@@ -25,4 +20,16 @@ func Bracket(data string) bool {
 	}
 
 	return len(brackets) == 0
+}
+
+func areMatching(a, b rune) bool {
+	switch a {
+	case '(':
+		return b == ')'
+	case '{':
+		return b == '}'
+	case '[':
+		return b == ']'
+	}
+	return false
 }
