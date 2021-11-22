@@ -8,14 +8,10 @@ func Bracket(data string) bool {
 		case '(', '[', '{':
 			brackets = append(brackets, b)
 		case ')', ']', '}':
-			if len(brackets) == 0 {
+			if len(brackets) == 0 || !areMatching(brackets[len(brackets)-1], b) {
 				return false
 			}
-			if areMatching(brackets[len(brackets)-1], b) {
-				brackets = brackets[:len(brackets)-1]
-			} else {
-				return false
-			}
+			brackets = brackets[:len(brackets)-1]
 		}
 	}
 
