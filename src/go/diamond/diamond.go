@@ -15,17 +15,14 @@ func Gen(b byte) (string, error) {
 	if difference == 0 {
 		return "A\n", nil
 	}
-	reversedResult := []string{}
-	result := []string{}
+	result := []string{getLine(difference, difference)}
 
-	for i := 0; i < difference; i++ {
-		result = append(result, getLine(difference, i))
-		reversedResult = append([]string{getLine(difference, i)}, reversedResult...)
+	for i := difference - 1; i >= 0; i-- {
+		line := getLine(difference, i)
+		result = append(append([]string{line}, result...), line)
 	}
 
-	result = append(result, getLine(difference, difference))
-
-	return strings.Join(result, "\n") + "\n" + strings.Join(reversedResult, "\n") + "\n", nil
+	return strings.Join(result, "\n") + "\n", nil
 }
 
 func getLine(totalDifference int, iteration int) string {

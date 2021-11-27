@@ -1,6 +1,7 @@
 package diamond
 
 import (
+	"fmt"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -115,10 +116,14 @@ func TestDiamondIsVerticallySymmetric(t *testing.T) {
 func TestDiamondIsSquare(t *testing.T) {
 	requirement := func(char byte, rows []string) bool {
 		if int(char-'A')*2+1 != len(rows) {
+			fmt.Println("row lenght issue111111")
+			fmt.Println(int(char-'A')*2 + 1)
+			fmt.Println(len(rows))
 			return false
 		}
 		for _, row := range rows {
 			if len(row) != len(rows) {
+				fmt.Println("row lenght issue")
 				return false
 			}
 		}
