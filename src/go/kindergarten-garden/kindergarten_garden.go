@@ -23,8 +23,6 @@ func NewGarden(plantsOriginal string, children []string) (*Garden, error) {
 		return &Garden{}, errors.New("garden format invalid")
 	}
 
-	var err error
-
 	allPlants := make(map[string][]string)
 	sortedChildren := make([]string, len(children))
 	copy(sortedChildren, children)
@@ -35,28 +33,31 @@ func NewGarden(plantsOriginal string, children []string) (*Garden, error) {
 			return &Garden{}, errors.New("duplicate name")
 		}
 
-		allPlants, err = handlePlantline(idx, allPlants, children, name, plantLines)
+		plants, err := handlePlantline(idx, len(children), plantLines)
 		if err != nil {
 			return nil, err
 		}
+		allPlants[name] = plants
+
 	}
 	return &Garden{plants: allPlants}, nil
 }
 
-func handlePlantline(i int, allPlants map[string][]string, children []string, name string, plantLines []string) (map[string][]string, error) {
+func handlePlantline(idx int, childrenCount int, plantLines []string) ([]string, error) {
+	var plants []string
 	for _, plantLine := range plantLines[1:] {
-		if len(plantLine) != 2*len(children) {
+		if len(plantLine) != 2*childrenCount {
 			return nil, errors.New("invalid format")
 		}
-		for _, plant := range plantLine[2*i : 2*i+2] {
+		for _, plant := range plantLine[2*idx : 2*idx+2] {
 			val, ok := plantLookup[plant]
 			if !ok {
 				return nil, errors.New("plants invalid")
 			}
-			allPlants[name] = append(allPlants[name], val)
+			plants = append(plants, val)
 		}
 	}
-	return allPlants, nil
+	return plants, nil
 }
 
 func (g *Garden) Plants(child string) ([]string, bool) {
