@@ -19,7 +19,7 @@ const (
 	SIXES           = "sixes"
 )
 
-var NUMBERS = [6]string{ONES, TWOS, THREES, FOURS, FIVES, SIXES}
+var NUMBERS = map[string]int{ONES: 1, TWOS: 2, THREES: 3, FOURS: 4, FIVES: 5, SIXES: 6}
 
 type dices []int
 
@@ -40,22 +40,17 @@ func Score(diceSlice []int, category string) (result int) {
 		return sum(diceSlice)
 
 	case ONES, TWOS, THREES, FOURS, FIVES, SIXES:
-		sort.Sort(dices(diceSlice))
-		for i, k := range NUMBERS {
-			if k == category {
-				return countN(diceSlice, i+1)
-			}
-		}
+		return countN(diceSlice, NUMBERS[category])
 
 	case FOUR_OF_A_KIND:
-		sort.Sort(dices(diceSlice))
+		sort.Ints(diceSlice)
 		if diceSlice[0] != diceSlice[3] && diceSlice[1] != diceSlice[4] {
 			return
 		}
 		result = 4 * diceSlice[1]
 
 	case FULL_HOUSE:
-		sort.Sort(dices(diceSlice))
+		sort.Ints(diceSlice)
 
 		if !(diceSlice[0] == diceSlice[1] && diceSlice[2] == diceSlice[4] && diceSlice[0] != diceSlice[4]) && !(diceSlice[0] == diceSlice[2] && diceSlice[3] == diceSlice[4] && diceSlice[0] != diceSlice[4]) {
 			return
@@ -64,14 +59,16 @@ func Score(diceSlice []int, category string) (result int) {
 		result = sum(diceSlice)
 
 	case YACHT:
-		sort.Sort(dices(diceSlice))
-		if diceSlice[0] != diceSlice[4] {
-			return
+		val := diceSlice[0]
+		for _, dice := range diceSlice[1:] {
+			if dice != val {
+				return
+			}
 		}
 		result = 50
 
 	case LITTLE_STRAIGHT:
-		sort.Sort(dices(diceSlice))
+		sort.Ints(diceSlice)
 		if !checkStraight(diceSlice, 1) {
 			return
 		}
@@ -90,14 +87,9 @@ func Score(diceSlice []int, category string) (result int) {
 
 func countN(dices []int, n int) (result int) {
 	for _, v := range dices {
-		if v > n {
-			return
+		if v == n {
+			result += n
 		}
-		if v < n {
-			continue
-		}
-
-		result += n
 	}
 	return
 }
