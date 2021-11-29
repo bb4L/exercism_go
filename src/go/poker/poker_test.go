@@ -5,8 +5,6 @@ import (
 	"testing"
 )
 
-// Define a function BestHand([]string) ([]string, error).
-
 var invalidTestCases = []struct {
 	name string
 	hand string
@@ -77,6 +75,9 @@ func TestBestHandInvalid(t *testing.T) {
 }
 
 func BenchmarkBestHand(b *testing.B) {
+	if testing.Short() {
+		b.Skip("skipping benchmark in short mode.")
+	}
 	for i := 0; i < b.N; i++ {
 		for _, tt := range validTestCases {
 			BestHand(tt.hands)
