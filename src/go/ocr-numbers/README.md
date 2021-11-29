@@ -1,9 +1,14 @@
-# OCR Numbers
+# Ocr Numbers
+
+Welcome to Ocr Numbers on Exercism's Go Track.
+If you need help running the tests or submitting your code, check out `HELP.md`.
+
+## Instructions
 
 Given a 3 x 4 grid of pipes, underscores, and spaces, determine which number is
 represented, or whether it is garbled.
 
-# Step One
+## Step One
 
 To begin with, convert a simple binary font to a string containing 0 or 1.
 
@@ -31,19 +36,19 @@ If the input is the correct size, but not recognizable, your program should retu
 
 If the input is the incorrect size, your program should return an error.
 
-# Step Two
+## Step Two
 
 Update your program to recognize multi-character binary strings, replacing garbled numbers with ?
 
-# Step Three
+## Step Three
 
 Update your program to recognize all numbers 0 through 9, both individually and as part of a larger string.
 
 ```text
- _ 
+ _
  _|
-|_ 
-   
+|_
+
 ```
 
 Is converted to "2"
@@ -57,52 +62,64 @@ Is converted to "2"
 
 Is converted to "1234567890"
 
-# Step Four
+## Step Four
 
 Update your program to handle multiple numbers, one per line. When converting several lines, join the lines with commas.
 
 ```text
-    _  _ 
+    _  _
   | _| _|
   ||_  _|
-         
-    _  _ 
-|_||_ |_ 
+
+    _  _
+|_||_ |_
   | _||_|
-         
- _  _  _ 
+
+ _  _  _
   ||_||_|
   ||_| _|
-         
+
 ```
 
 Is converted to "123,456,789"
 
-## Coding the solution
+## Implementation Notes
 
-Look for a stub file having the name ocr_numbers.go
-and place your solution code in that file.
+Define a function recognizeDigit as described in Step 1 of instructions except make it recognize
+all ten digits 0 to 9.  Pick what you like for parameters and return values
+but make it useful as a subroutine for step 2.
 
-## Running the tests
+For Step 2 define,
 
-To run the tests run the command `go test` from within the exercise directory.
+   func Recognize(string) []string
 
-If the test suite contains benchmarks, you can run these with the `--bench` and `--benchmem`
-flags:
+and implement it using recognizeDigit.
 
-    go test -v --bench . --benchmem
+Input strings tested here have a \n at the beginning of each line and
+no trailing \n on the last line. (This makes for readable raw string
+literals.)
 
-Keep in mind that each reviewer will run benchmarks on a different machine, with
-different specs, so the results from these benchmark tests may vary.
-
-## Further information
-
-For more detailed information about the Go track, including how to get help if
-you're having trouble, please visit the exercism.io [Go language page](http://exercism.io/languages/go/resources).
+For bonus points, gracefully handle misformatted data.  What should you
+do with a partial cell?  Discard it?  Pad with spaces?  Report it with a
+"?" character?  What should you do if the first character is not \n?
 
 ## Source
 
-Inspired by the Bank OCR kata [http://codingdojo.org/cgi-bin/wiki.pl?KataBankOCR](http://codingdojo.org/cgi-bin/wiki.pl?KataBankOCR)
+### Contributed to by
 
-## Submitting Incomplete Solutions
-It's possible to submit an incomplete solution so you can see how others have completed the exercise.
+- @alebaffa
+- @bitfield
+- @ekingery
+- @ferhatelmas
+- @hilary
+- @kytrinyx
+- @leenipper
+- @petertseng
+- @robphoenix
+- @sebito91
+- @soniakeys
+- @tleen
+
+### Based on
+
+Inspired by the Bank OCR kata - http://codingdojo.org/cgi-bin/wiki.pl?KataBankOCR
