@@ -9,6 +9,11 @@ var description = []string{"", "It wriggled and jiggled and tickled inside her."
 
 func Verse(v int) string {
 	var builder strings.Builder
+	internalVerse(&builder, v)
+	return builder.String()
+}
+
+func internalVerse(builder *strings.Builder, v int) {
 	builder.WriteString("I know an old lady who swallowed a ")
 	builder.WriteString(animals[v-1])
 	builder.WriteString(".\n")
@@ -32,8 +37,6 @@ func Verse(v int) string {
 	}
 
 	builder.WriteString(getEnding(v))
-
-	return builder.String()
 }
 
 func getEnding(v int) string {
@@ -46,7 +49,8 @@ func getEnding(v int) string {
 func Verses(start, end int) string {
 	var builder strings.Builder
 	for i := start; i <= end; i++ {
-		builder.WriteString(Verse(i))
+		internalVerse(&builder, i)
+		// builder.WriteString(Verse(i))
 		if i < end {
 			builder.WriteString("\n\n")
 		}
