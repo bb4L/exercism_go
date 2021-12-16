@@ -14,29 +14,31 @@ func Verse(v int) string {
 }
 
 func internalVerse(builder *strings.Builder, v int) {
+	defer builder.WriteString(getEnding(v))
 	builder.WriteString("I know an old lady who swallowed a ")
 	builder.WriteString(animals[v-1])
 	builder.WriteString(".\n")
-	if v > 1 && v < 8 {
-		if description[v-1] != "" {
-			builder.WriteString(description[v-1])
-			builder.WriteString("\n")
-		}
-		for i := v - 1; i > 0; i-- {
 
-			builder.WriteString("She swallowed the ")
-			builder.WriteString(animals[i])
-			builder.WriteString(" to catch the ")
-			builder.WriteString(animals[i-1])
-			if i == 2 && v > 2 {
-				builder.WriteString(" that wriggled and jiggled and tickled inside her")
-			}
-			builder.WriteString(".\n")
-
-		}
+	if v <= 1 || v >= 8 {
+		return
 	}
 
-	builder.WriteString(getEnding(v))
+	if description[v-1] != "" {
+		builder.WriteString(description[v-1])
+		builder.WriteString("\n")
+	}
+
+	for i := v - 1; i > 0; i-- {
+		builder.WriteString("She swallowed the ")
+		builder.WriteString(animals[i])
+		builder.WriteString(" to catch the ")
+		builder.WriteString(animals[i-1])
+		if i == 2 && v > 2 {
+			builder.WriteString(" that wriggled and jiggled and tickled inside her")
+		}
+		builder.WriteString(".\n")
+	}
+
 }
 
 func getEnding(v int) string {
@@ -50,7 +52,6 @@ func Verses(start, end int) string {
 	var builder strings.Builder
 	for i := start; i <= end; i++ {
 		internalVerse(&builder, i)
-		// builder.WriteString(Verse(i))
 		if i < end {
 			builder.WriteString("\n\n")
 		}
