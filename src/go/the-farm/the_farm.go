@@ -10,24 +10,20 @@ import (
 // TODO: Define the SillyNephewError type here.
 
 type SillyNephewError struct {
-	msg string
+	cows int
 }
 
 func (err SillyNephewError) Error() string {
-	return err.msg
+	return fmt.Sprintf("silly nephew, there cannot be %d cows", err.cows)
 }
 
 // DivideFood computes the fodder amount per cow for the given cows.
 func DivideFood(weightFodder WeightFodder, cows int) (float64, error) {
 	if cows < 0 {
-		return 0, SillyNephewError{fmt.Sprintf("silly nephew, there cannot be %d cows", cows)}
+		return 0, SillyNephewError{cows}
 	}
 
 	amount, err := weightFodder.FodderAmount()
-	if amount < 0 {
-		return 0, errors.New("Negative fodder")
-	}
-
 	if err != nil {
 		if err != ErrScaleMalfunction {
 			return 0, err
@@ -35,6 +31,10 @@ func DivideFood(weightFodder WeightFodder, cows int) (float64, error) {
 		amount *= 2
 
 	}
+	if amount < 0 {
+		return 0, errors.New("Negative fodder")
+	}
+
 	if cows == 0 {
 		return 0, errors.New("Division by zero")
 	}
