@@ -2,24 +2,25 @@ package bowling
 
 import (
 	"errors"
-	"fmt"
 )
 
+type FrameType int
+
 const (
-	ONGOING = iota
+	ONGOING FrameType = iota
 	OPEN
 	SPARE
 	STRIKE
 )
 
 type Frame struct {
-	frameType   int
+	frameType   FrameType
 	PinsKnocked int
 	rolls       int
 	firstThrow  int
 }
 
-func (frame *Frame) roll(pins int) (err error) {
+func (frame *Frame) roll(pins int) error {
 	frame.rolls += 1
 	if frame.rolls == 1 {
 		frame.firstThrow = pins
@@ -40,10 +41,10 @@ func (frame *Frame) roll(pins int) (err error) {
 	}
 
 	if frame.PinsKnocked > 10 {
-		return errors.New("Pin count exceeds pins on the lane")
+		return errors.New("pin count exceeds pins on the lane")
 	}
 
-	return
+	return nil
 }
 
 type Game struct {
@@ -56,27 +57,23 @@ func NewGame() *Game {
 	return &Game{}
 }
 
-func (game *Game) Roll(pins int) (err error) {
+func (game *Game) Roll(pins int) error {
 	game.rolls++
 	if pins < 0 {
-		return errors.New("Cannot roll negativ count of pins")
+		return errors.New("cannot roll negativ count of pins")
 	}
 
-	if game.currentFrame.frameType == ONGOING {
-		err := game.currentFrame.roll(pins)
-		if err != nil {
-			return err
-		}
-	} else {
+	if game.currentFrame.frameType != ONGOING {
 		game.frames = append(game.frames, game.currentFrame)
 		game.currentFrame = Frame{}
-		err := game.currentFrame.roll(pins)
-		if err != nil {
-			return err
-		}
 	}
 
-	gameOver := errors.New("Cannot roll after game is over")
+	err := game.currentFrame.roll(pins)
+	if err != nil {
+		return err
+	}
+
+	gameOver := errors.New("cannot roll after game is over")
 	if len(game.frames) >= 10 {
 		switch game.frames[9].frameType {
 		case SPARE:
@@ -92,13 +89,13 @@ func (game *Game) Roll(pins int) (err error) {
 		}
 	}
 
-	return
+	return nil
 }
 
 func (game *Game) Score() (int, error) {
 	frames := append(game.frames, game.currentFrame)
 	if !game.gameFinished(frames) {
-		return 0, errors.New("Score cannot be taken until the end of the game")
+		return 0, errors.New("score cannot be taken until the end of the game")
 	}
 	score := 0
 	for idx, frame := range frames {
@@ -112,7 +109,7 @@ func (game *Game) Score() (int, error) {
 	return score, nil
 }
 
-func (game *Game) getNextThrows(idx int, frameType int) (result int) {
+func (game *Game) getNextThrows(idx int, frameType FrameType) (result int) {
 	if frameType == SPARE && len(game.frames) > idx {
 		result += game.frames[idx+1].firstThrow
 	}
@@ -125,11 +122,10 @@ func (game *Game) getNextThrows(idx int, frameType int) (result int) {
 		}
 	}
 
-	return
+	return result
 }
 
 func (game *Game) gameFinished(frames []Frame) bool {
-	fmt.Printf("frames len %d\n", len(game.frames))
 	if len(frames) < 10 {
 		return false
 	}
