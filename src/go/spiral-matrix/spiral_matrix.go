@@ -1,6 +1,18 @@
 package spiralmatrix
 
-import "math"
+type Position struct {
+	Row int
+	Col int
+}
+
+type Direction int
+
+const (
+	Right Direction = iota
+	Down
+	Left
+	Up
+)
 
 func SpiralMatrix(size int) (result [][]int) {
 
@@ -10,41 +22,49 @@ func SpiralMatrix(size int) (result [][]int) {
 	}
 
 	count := 1
-	pos := [2]int{0, 0}
+	pos := Position{0, 0}
 	if size > 0 {
 		result[0][0] = 1
 	}
 
 	for i := size; i > 0; i -= 2 {
-		for direction := 0; direction < 4; direction++ {
+		for _, direction := range []Direction{Right, Down, Left, Up} {
 			for k := 0; k < i-1; k++ {
 				if count > size*size {
 					break
 				}
 
-				result[pos[0]][pos[1]] = count
+				result[pos.Row][pos.Col] = count
 
-				if direction == 3 && math.Abs(float64(i-k-1)) == 1 {
-					pos[1] += 1
+				if direction == Up && IntAbs(i-k-1) == 1 {
+					pos.Col += 1
 					if size%2 != 0 {
-						result[pos[0]][pos[1]] = 1 + count
+						result[pos.Row][pos.Col] = 1 + count
 					}
 					count++
 					break
 				}
 				switch direction {
-				case 0:
-					pos[1] += 1
-				case 1:
-					pos[0] += 1
-				case 2:
-					pos[1] -= 1
-				case 3:
-					pos[0] -= 1
+				case Right:
+					pos.Col += 1
+				case Down:
+					pos.Row += 1
+				case Left:
+					pos.Col -= 1
+				case Up:
+					pos.Row -= 1
 				}
 				count++
 			}
 		}
 	}
-	return
+	return result
+}
+
+// IntAbs returns the absolute value of an integer.
+func IntAbs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
