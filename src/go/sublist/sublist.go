@@ -26,11 +26,9 @@ func Sublist(list1, list2 []int) Relation {
 		list1, list2 = list2, list1
 	}
 
-	isSub := false
-
 	for j, k := range list1 {
 		if k == list2[0] && len(list2) <= len(list1)-j {
-			isSub = true
+			isSub := true
 			for i, n := range list2[1:] {
 				if list1[j+i+1] != n {
 					isSub = false
@@ -39,17 +37,13 @@ func Sublist(list1, list2 []int) Relation {
 			}
 
 			if isSub {
-				break
+				if reverse {
+					return "sublist"
+				}
+				return "superlist"
 			}
 		}
 
-	}
-
-	if isSub {
-		if reverse {
-			return "sublist"
-		}
-		return "superlist"
 	}
 
 	return "unequal"
