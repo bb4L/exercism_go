@@ -7,29 +7,31 @@ import (
 	"strings"
 )
 
+var errBadFormat = errors.New("bad format")
+
 func (board Board) Count() error {
 	lenghtLine := len(board[0])
 
 	if string(board[0]) != "+"+strings.Repeat("-", len(board[0])-2)+"+" {
-		return errors.New("bad format")
+		return errBadFormat
 	}
 
 	for i, val := range board {
 		if len(val) != lenghtLine {
-			return errors.New("bad format")
+			return errBadFormat
 		}
 
 		switch val[0] {
 		case []byte("|")[0], []byte("+")[0], []byte("-")[0]:
 			// do nothing
 		default:
-			return errors.New("bad format")
+			return errBadFormat
 		}
 		switch val[len(val)-1] {
 		case []byte("|")[0], []byte("+")[0], []byte("-")[0]:
 			// do nothing
 		default:
-			return errors.New("bad format")
+			return errBadFormat
 		}
 
 		for j, val2 := range val {
