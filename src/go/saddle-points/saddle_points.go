@@ -23,7 +23,10 @@ func New(s string) (*Matrix, error) {
 		var rowMaxs []int
 
 		for j, val := range strings.Split(row, " ") {
-			intVal, _ := strconv.Atoi(val)
+			intVal, err := strconv.Atoi(val)
+			if err != nil {
+				return &m, err
+			}
 
 			if j == 0 || intVal > rowMax {
 				rowMax = intVal
