@@ -5,6 +5,8 @@ import "strings"
 func Transpose(data []string) []string {
 	rows := []*strings.Builder{}
 
+	result := []string{}
+
 	maxLine := 0
 	for i, row := range data {
 		if len(data) > maxLine {
@@ -32,8 +34,6 @@ func Transpose(data []string) []string {
 			}
 		}
 	}
-
-	result := []string{}
 
 	for _, r := range rows {
 		result = append(result, r.String())
