@@ -4,7 +4,6 @@ import (
 	"errors"
 )
 
-// Define the List and Element types here.
 type List struct {
 	firstElement *Element
 }
@@ -23,12 +22,10 @@ func New(data []int) *List {
 }
 
 func (l *List) Size() (size int) {
-	elem := l.firstElement
-	for elem != nil {
+	for elem := l.firstElement; elem != nil; elem = elem.next {
 		size++
-		elem = elem.next
 	}
-	return
+	return size
 }
 
 func (l *List) Push(element int) {
@@ -46,12 +43,10 @@ func (l *List) Pop() (int, error) {
 }
 
 func (l *List) Array() (result []int) {
-	elem := l.firstElement
-	for elem != nil {
+	for elem := l.firstElement; elem != nil; elem = elem.next {
 		result = append([]int{elem.data}, result...)
-		elem = elem.next
 	}
-	return
+	return result
 }
 
 func (l *List) Reverse() *List {
