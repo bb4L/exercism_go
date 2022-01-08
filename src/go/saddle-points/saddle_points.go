@@ -7,35 +7,44 @@ import (
 
 // Define the Matrix and Pair types here.
 type Matrix struct {
-	data         [][]int
-	saddlePoints []Pair
+	data [][]int
 }
 type Pair [2]int
 
 func New(s string) (*Matrix, error) {
 	m := Matrix{}
-	maxVals := [][]int{}
 
 	for i, row := range strings.Split(s, "\n") {
 		m.data = append(m.data, []int{})
 
-		var rowMax int
-		var rowMaxs []int
-
-		for j, val := range strings.Split(row, " ") {
+		for _, val := range strings.Split(row, " ") {
 			intVal, err := strconv.Atoi(val)
 			if err != nil {
 				return &m, err
 			}
 
-			if j == 0 || intVal > rowMax {
-				rowMax = intVal
+			m.data[i] = append(m.data[i], intVal)
+		}
+	}
+
+	return &m, nil
+}
+
+func (m *Matrix) Saddle() []Pair {
+	maxVals := [][]int{}
+	saddlePoints := []Pair{}
+
+	for _, row := range m.data {
+		var rowMax int
+		var rowMaxs []int
+
+		for j, val := range row {
+			if j == 0 || val > rowMax {
+				rowMax = val
 				rowMaxs = []int{j}
-			} else if intVal == rowMax {
+			} else if val == rowMax {
 				rowMaxs = append(rowMaxs, j)
 			}
-
-			m.data[i] = append(m.data[i], intVal)
 		}
 		maxVals = append(maxVals, rowMaxs)
 	}
@@ -58,14 +67,10 @@ func New(s string) (*Matrix, error) {
 			}
 
 			if isSaddle {
-				m.saddlePoints = append(m.saddlePoints, Pair{i, maxIdx})
+				saddlePoints = append(saddlePoints, Pair{i, maxIdx})
 			}
 		}
-
 	}
-	return &m, nil
-}
 
-func (m *Matrix) Saddle() []Pair {
-	return m.saddlePoints
+	return saddlePoints
 }
