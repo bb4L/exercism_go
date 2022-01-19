@@ -41,33 +41,39 @@ func main() {
 	}
 
 	// format code
-	runFormat()
+	if runFormat() != nil {
+		panic(-1)
+	}
 
 	// lint code
-	runLinting()
+	if runLinting() != nil {
+		panic(-1)
+	}
 
 	// run test
-	runTests()
+	if runTests() != nil {
+		panic(-1)
+	}
 
 }
 
-func runFormat() {
-	runCmd([]string{"go", "fmt"}, "failed to format the code")
+func runFormat() error {
+	return runCmd([]string{"go", "fmt"}, "failed to format the code")
 }
 
-func runLinting() {
-	runCmd([]string{"golint"}, "failed to run golint")
+func runLinting() error {
+	return runCmd([]string{"golint"}, "failed to run golint")
 }
 
-func runTests() {
-	runCmd([]string{"go", "test"}, "tests failed")
+func runTests() error {
+	return runCmd([]string{"go", "test"}, "tests failed")
 }
 
-func runCmd(toExecute []string, errorMsg string) {
+func runCmd(toExecute []string, errorMsg string) error {
 	cmd := exec.Command(toExecute[0])
 
 	if len(toExecute) > 1 {
-		cmd = exec.Command(toExecute[0], toExecute[1:len(toExecute)]...)
+		cmd = exec.Command(toExecute[0], toExecute[1:]...)
 	}
 
 	cmd.Stdout = InfoLogger.Writer()
@@ -76,5 +82,8 @@ func runCmd(toExecute []string, errorMsg string) {
 	if err != nil {
 		fmt.Println(err)
 		FatalLogger.Fatalf(errorMsg)
+		return err
 	}
+
+	return nil
 }
