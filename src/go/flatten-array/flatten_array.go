@@ -4,6 +4,7 @@ import (
 	"reflect"
 )
 
+// Flatten flattens arbitrary nested arrays
 func Flatten(data interface{}) []interface{} {
 	result := []interface{}{}
 
