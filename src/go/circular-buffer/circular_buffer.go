@@ -20,13 +20,18 @@ type Buffer struct {
 }
 
 func NewBuffer(size int) *Buffer {
-	return &Buffer{start: 0, end: 0, data: make([]*byte, size), size: size}
+	return &Buffer{
+		start: 0,
+		end:   0,
+		data:  make([]*byte, size),
+		size:  size,
+	}
 }
 
 func (b *Buffer) ReadByte() (byte, error) {
 	returnByte := b.data[b.start]
 	if returnByte == nil {
-		return 0, errors.New("Tried to read from empty buffer")
+		return 0, errors.New("tried to read from empty buffer")
 	}
 	b.data[b.start] = nil
 
@@ -41,7 +46,7 @@ func (b *Buffer) WriteByte(c byte) error {
 		newEnd := (b.end + 1) % b.size
 
 		if newEnd == b.start {
-			return errors.New("Tried to write to full buffer")
+			return errors.New("tried to write to full buffer")
 		}
 
 		b.end = newEnd
