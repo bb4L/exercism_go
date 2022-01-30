@@ -21,9 +21,5 @@ func IsPangram(input string) bool {
 		set[lower] = struct{}{}
 	}
 
-	if len(set) != 26 {
-		return false
-	}
-
-	return true
+	return len(set) == 26
 }

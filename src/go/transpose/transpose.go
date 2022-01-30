@@ -2,6 +2,7 @@ package transpose
 
 import "strings"
 
+// Transpose transposes the given data
 func Transpose(data []string) []string {
 	rows := []*strings.Builder{}
 

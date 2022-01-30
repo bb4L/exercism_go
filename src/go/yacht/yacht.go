@@ -5,21 +5,21 @@ import (
 )
 
 const (
-	YACHT           = "yacht"
-	LITTLE_STRAIGHT = "little straight"
-	BIG_STRAIGHT    = "big straight"
-	FULL_HOUSE      = "full house"
-	CHOICE          = "choice"
-	FOUR_OF_A_KIND  = "four of a kind"
-	ONES            = "ones"
-	TWOS            = "twos"
-	THREES          = "threes"
-	FOURS           = "fours"
-	FIVES           = "fives"
-	SIXES           = "sixes"
+	yacht          = "yacht"
+	littleStraight = "little straight"
+	bigStraight    = "big straight"
+	fullHouse      = "full house"
+	choice         = "choice"
+	fourOfAKind    = "four of a kind"
+	ones           = "ones"
+	twos           = "twos"
+	threes         = "threes"
+	fours          = "fours"
+	fives          = "fives"
+	sixes          = "sixes"
 )
 
-var NUMBERS = map[string]int{ONES: 1, TWOS: 2, THREES: 3, FOURS: 4, FIVES: 5, SIXES: 6}
+var numbers = map[string]int{ones: 1, twos: 2, threes: 3, fours: 4, fives: 5, sixes: 6}
 
 type dices []int
 
@@ -34,22 +34,23 @@ func (slice dices) Swap(i, j int) {
 	slice[i], slice[j] = slice[j], slice[i]
 }
 
+// Score returns the score for a slice of dices and the chosen category
 func Score(diceSlice []int, category string) (result int) {
 	switch category {
-	case CHOICE:
+	case choice:
 		return sum(diceSlice)
 
-	case ONES, TWOS, THREES, FOURS, FIVES, SIXES:
-		return countN(diceSlice, NUMBERS[category])
+	case ones, twos, threes, fours, fives, sixes:
+		return countN(diceSlice, numbers[category])
 
-	case FOUR_OF_A_KIND:
+	case fourOfAKind:
 		sort.Ints(diceSlice)
 		if diceSlice[0] != diceSlice[3] && diceSlice[1] != diceSlice[4] {
 			return
 		}
 		result = 4 * diceSlice[1]
 
-	case FULL_HOUSE:
+	case fullHouse:
 		sort.Ints(diceSlice)
 
 		if !(diceSlice[0] == diceSlice[1] && diceSlice[2] == diceSlice[4] && diceSlice[0] != diceSlice[4]) && !(diceSlice[0] == diceSlice[2] && diceSlice[3] == diceSlice[4] && diceSlice[0] != diceSlice[4]) {
@@ -58,7 +59,7 @@ func Score(diceSlice []int, category string) (result int) {
 
 		result = sum(diceSlice)
 
-	case YACHT:
+	case yacht:
 		val := diceSlice[0]
 		for _, dice := range diceSlice[1:] {
 			if dice != val {
@@ -67,14 +68,14 @@ func Score(diceSlice []int, category string) (result int) {
 		}
 		result = 50
 
-	case LITTLE_STRAIGHT:
+	case littleStraight:
 		sort.Ints(diceSlice)
 		if !checkStraight(diceSlice, 1) {
 			return
 		}
 		result = 30
 
-	case BIG_STRAIGHT:
+	case bigStraight:
 		sort.Sort(dices(diceSlice))
 		if !checkStraight(diceSlice, 2) {
 			return

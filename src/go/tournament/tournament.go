@@ -31,7 +31,7 @@ func Tally(reader io.Reader, writer io.Writer) error {
 		values := strings.Split(line, ";")
 
 		if len(values) != 3 {
-			return errors.New("Invalid line")
+			return errors.New("invalid line")
 		}
 
 		t1, t2 := teams[values[0]], teams[values[1]]
@@ -55,7 +55,7 @@ func Tally(reader io.Reader, writer io.Writer) error {
 			t1.losses++
 
 		default:
-			return errors.New("Invalid value in result")
+			return errors.New("invalid value in result")
 		}
 
 		teams[t1.name], teams[t2.name] = t1, t2

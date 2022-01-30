@@ -10,6 +10,7 @@ type state struct {
 	change         []int
 }
 
+// Change returns the change for given coins and initialValue
 func Change(coins []int, initialValue int) ([]int, error) {
 	result := []int{}
 	if initialValue == 0 {
@@ -45,5 +46,4 @@ func Change(coins []int, initialValue int) ([]int, error) {
 	}
 
 	return result, nil
-
 }

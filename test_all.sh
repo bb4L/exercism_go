@@ -2,20 +2,25 @@ echo "TEST ALL"
 one_failed=0
 for dir in src/go/*/
 do     
-    ./testing ${dir}
+    if [ "$(gofmt -s -l $dir | wc -l)" -gt 0 ]; then 
+        echo "formatting failed for" $dir
+        gofmt -s -l $dir
+        one_failed=1
+    fi
+
+    ./src/testing ${dir}
 
     if [ $? -eq 0 ]; then
         echo ""
     else
-        echo FAIL
         one_failed=1
     fi
 done
 
 if [ $one_failed -eq 1 ]; then
-    echo "FAILED"
+    echo "FAIL"
     exit 1
 else
-    echo "NOT FAILED"
+    echo "PASS"
     exit 0
 fi

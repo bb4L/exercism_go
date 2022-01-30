@@ -11,6 +11,7 @@ var allergenes = map[string]uint{
 	"cats":         128,
 }
 
+// Allergies return the allergies in the code
 func Allergies(allergies uint) (result []string) {
 	for allergen, value := range allergenes {
 		if allergies&value == value {
@@ -20,6 +21,7 @@ func Allergies(allergies uint) (result []string) {
 	return result
 }
 
+// AllergicTo checks if allergies contain the given allergen
 func AllergicTo(allergies uint, allergen string) bool {
 	return allergies&allergenes[allergen] == allergenes[allergen]
 }

@@ -1,7 +1,9 @@
 package sublist
 
+// Relation of two lists
 type Relation string
 
+// Sublist returns relation of list1 and list2
 func Sublist(list1, list2 []int) Relation {
 	if len(list1) == 0 && len(list2) > 0 {
 		return "sublist"

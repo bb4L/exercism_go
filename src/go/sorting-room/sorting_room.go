@@ -10,6 +10,7 @@ func DescribeNumber(f float64) string {
 	return fmt.Sprintf("This is the number %.1f", f)
 }
 
+// NumberBox a box holding a number
 type NumberBox interface {
 	Number() int
 }
@@ -19,14 +20,17 @@ func DescribeNumberBox(nb NumberBox) string {
 	return fmt.Sprintf("This is a box containing the number %d.0", nb.Number())
 }
 
+// FancyNumber reprsent number as sting
 type FancyNumber struct {
 	n string
 }
 
+// Value returns the value of the FancyNumber
 func (i FancyNumber) Value() string {
 	return i.n
 }
 
+// FancyNumberBox box for a FancyNumber
 type FancyNumberBox interface {
 	Value() string
 }

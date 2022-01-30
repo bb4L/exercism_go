@@ -1,20 +1,10 @@
 package encode
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
 )
-
-func writeRune(sb strings.Builder, r rune, n int) strings.Builder {
-	if n > 0 {
-		sb.WriteString(fmt.Sprint(n))
-	}
-	sb.WriteRune(r)
-
-	return sb
-}
 
 // RunLengthEncode encode the data
 func RunLengthEncode(data string) string {
@@ -53,7 +43,7 @@ func RunLengthDecode(data string) string {
 	var sb strings.Builder
 
 	count := 0
-	for _, r := range []rune(data) {
+	for _, r := range data {
 		if unicode.IsDigit(r) {
 			if count > 0 {
 				count = count * 10

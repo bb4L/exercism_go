@@ -21,7 +21,7 @@ var (
 )
 
 func init() {
-	InfoLogger = log.New(os.Stderr, "INFO: ", log.Ldate|log.Ltime|log.Lmsgprefix)
+	InfoLogger = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lmsgprefix)
 	ErrorLogger = log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lmsgprefix)
 	FatalLogger = log.New(os.Stderr, "FATAL: ", log.Ldate|log.Ltime|log.Lmsgprefix)
 	err = nil
@@ -40,29 +40,19 @@ func main() {
 		FatalLogger.Fatalf("failed to change directory to %s", argsWithoutProg[0])
 	}
 
-	// format code
-	if runFormat() != nil {
-		panic(-1)
-	}
-
-	// lint code
-	if runLinting() != nil {
-		panic(-1)
+	if runStaticCheck() != nil {
+		FatalLogger.Fatalf("staticcheck failed for %s", argsWithoutProg[0])
 	}
 
 	// run test
 	if runTests() != nil {
-		panic(-1)
+		FatalLogger.Fatalf("tests failed for %s", argsWithoutProg[0])
 	}
 
 }
 
-func runFormat() error {
-	return runCmd([]string{"go", "fmt"}, "failed to format the code")
-}
-
-func runLinting() error {
-	return runCmd([]string{"golint"}, "failed to run golint")
+func runStaticCheck() error {
+	return runCmd([]string{"staticcheck", "."}, "failed to run staticcheck")
 }
 
 func runTests() error {

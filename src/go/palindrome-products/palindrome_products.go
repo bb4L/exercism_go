@@ -5,12 +5,13 @@ import (
 	"strconv"
 )
 
-// Define Product type here.
+// Product holds the product and the factorizations
 type Product struct {
 	product        int
 	Factorizations [][2]int
 }
 
+// Products returns the products in a given range
 func Products(fmin, fmax int) (Product, Product, error) {
 	if fmin > fmax {
 		return Product{}, Product{}, errors.New("fmin > fmax")
@@ -42,7 +43,7 @@ func Products(fmin, fmax int) (Product, Product, error) {
 	}
 
 	if len(upperProduct.Factorizations) == 0 {
-		return Product{}, upperProduct, errors.New("no palindromes...")
+		return Product{}, upperProduct, errors.New("no palindromes")
 	}
 
 	if upperProduct.product == lowerProduct.product {

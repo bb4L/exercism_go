@@ -5,6 +5,7 @@ import (
 	"unicode"
 )
 
+// Number returns the phonenumber formatted or a error
 func Number(phoneNumber string) (string, error) {
 	digits := []rune{}
 	for _, val := range phoneNumber {
@@ -56,6 +57,7 @@ func Number(phoneNumber string) (string, error) {
 	return string(digits), nil
 }
 
+// AreaCode returns the areacode of a phone number
 func AreaCode(phoneNumber string) (string, error) {
 	phoneNumber, err := Number(phoneNumber)
 	if err != nil {
@@ -64,11 +66,11 @@ func AreaCode(phoneNumber string) (string, error) {
 	return phoneNumber[0:3], nil
 }
 
+// Format returns the formatted phone number
 func Format(phoneNumber string) (string, error) {
 	phoneNumber, err := Number(phoneNumber)
 	if err != nil {
 		return "", err
 	}
-	// return fmt.Sprintf("(%s) %s-%s", phoneNumber[0:3], phoneNumber[3:6], phoneNumber[6:10]), nil
 	return "(" + phoneNumber[0:3] + ") " + phoneNumber[3:6] + "-" + phoneNumber[6:10], nil
 }

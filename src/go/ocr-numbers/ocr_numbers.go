@@ -25,6 +25,7 @@ func recognizeDigit(data []string) string {
 	return val
 }
 
+// Recognize parses the ocr numbers to normal numbers
 func Recognize(data string) []string {
 	splitted := strings.Split(data, "\n")
 

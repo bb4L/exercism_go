@@ -15,10 +15,10 @@ type Robot struct {
 var random = rand.New(rand.NewSource(time.Now().UnixNano()))
 var names = make(map[string]bool)
 
-func nameExists(value string) bool {
-	_, ok := names[value]
-	return ok
-}
+// func nameExists(value string) bool {
+// 	_, ok := names[value]
+// 	return ok
+// }
 
 func createName() string {
 	r1 := random.Intn(26) + 'A'
@@ -35,7 +35,7 @@ func (r *Robot) Name() (string, error) {
 
 	if len(names) == 26*26*10*10*10 {
 
-		return "", errors.New("Too many robots")
+		return "", errors.New("too many robots")
 	}
 	r.name = createName()
 	for names[r.name] {

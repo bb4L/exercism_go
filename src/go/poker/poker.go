@@ -8,20 +8,20 @@ import (
 )
 
 const (
-	HIGH = iota
-	PAIR
-	TWO_PAIR
-	THREE_OF_A_KIND
-	STRAIGHT
-	FLUSH
-	FULL_HOUSE
-	FOUR_OF_A_KIND
-	STRAIGHT_FLUSH
+	high = iota
+	pair
+	twoPair
+	threeOfAKind
+	straight
+	flush
+	fullHouse
+	fourOfAKind
+	straightFlush
 )
 
-var COLORS = []string{"♢", "♡", "♧", "♤"}
+var colors = []string{"♢", "♡", "♧", "♤"}
 
-var PICTURE_CARDS = map[string]int{
+var pictureCards = map[string]int{
 	"J": 11, "Q": 12, "K": 13, "A": 14,
 }
 
@@ -47,7 +47,7 @@ func createHand(rawHand string) (result *hand, err error) {
 	minNumber := 14
 	maxNumber := 0
 	maxMultipleNumbers := 0
-	colors := map[string]int{}
+	handColors := map[string]int{}
 	numbers := map[int]int{}
 
 	for _, card := range cards {
@@ -63,7 +63,7 @@ func createHand(rawHand string) (result *hand, err error) {
 		color := string(r[len(r)-1])
 
 		foundColor := false
-		for _, v := range COLORS {
+		for _, v := range colors {
 			if v == color {
 				foundColor = true
 				break
@@ -74,10 +74,10 @@ func createHand(rawHand string) (result *hand, err error) {
 			return nil, errors.New("invalid color")
 		}
 
-		colors[color] = colors[color] + 1
+		handColors[color] = handColors[color] + 1
 
 		number := -1
-		n, ok := PICTURE_CARDS[rawNumber]
+		n, ok := pictureCards[rawNumber]
 		if ok {
 			number = n
 		} else {
@@ -105,7 +105,7 @@ func createHand(rawHand string) (result *hand, err error) {
 	result.highCard = -1
 	result.handScore = -1
 
-	isFlush := len(colors) == 1
+	isFlush := len(handColors) == 1
 	isStraight := getIsStraight(numbers, minNumber, maxNumber)
 
 	if isStraight {
@@ -117,20 +117,20 @@ func createHand(rawHand string) (result *hand, err error) {
 	}
 
 	if isFlush && isStraight {
-		result.handScore = STRAIGHT_FLUSH
+		result.handScore = straightFlush
 	} else {
 		if isFlush {
-			result.handScore = FLUSH
+			result.handScore = flush
 		}
 
 		if isStraight {
-			result.handScore = STRAIGHT
+			result.handScore = straight
 		}
 	}
 
 	switch maxMultipleNumbers {
 	case 4:
-		result.handScore = FOUR_OF_A_KIND
+		result.handScore = fourOfAKind
 		for k, v := range numbers {
 			if v == 4 {
 				result.fourOfAKind = k
@@ -140,9 +140,9 @@ func createHand(rawHand string) (result *hand, err error) {
 		}
 	case 3:
 		if len(numbers) == 2 {
-			result.handScore = FULL_HOUSE
+			result.handScore = fullHouse
 		} else {
-			result.handScore = THREE_OF_A_KIND
+			result.handScore = threeOfAKind
 		}
 		for k, v := range numbers {
 			if v == 3 {
@@ -155,9 +155,9 @@ func createHand(rawHand string) (result *hand, err error) {
 		}
 	case 2:
 		if len(numbers) == 3 {
-			result.handScore = TWO_PAIR
+			result.handScore = twoPair
 		} else {
-			result.handScore = PAIR
+			result.handScore = pair
 		}
 
 		higherPair := 0
@@ -173,7 +173,7 @@ func createHand(rawHand string) (result *hand, err error) {
 		result.highCard = higherPair
 	default:
 		if !(isStraight || isFlush) {
-			result.handScore = HIGH
+			result.handScore = high
 		}
 		if result.highCard == -1 {
 			for key := range numbers {
@@ -206,6 +206,7 @@ func getIsStraight(numbers map[int]int, minNumber, maxNumber int) bool {
 	return false
 }
 
+// BestHand retruns the best hand
 func BestHand(rawHands []string) ([]string, error) {
 	var hands []*hand
 
@@ -247,11 +248,11 @@ func compareHands(h1, h2 *hand) int {
 
 	if handComparison == 0 {
 
-		if h1.handScore == FULL_HOUSE {
+		if h1.handScore == fullHouse {
 			return comparingNumbers([]int{h1.threeOfAKind, h1.pairs[0]}, []int{h2.threeOfAKind, h2.pairs[0]})
 		}
 
-		if h1.handScore == FOUR_OF_A_KIND {
+		if h1.handScore == fourOfAKind {
 			return comparingNumbers([]int{h1.fourOfAKind, h1.highCard}, []int{h2.fourOfAKind, h2.highCard})
 		}
 

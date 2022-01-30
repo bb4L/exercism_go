@@ -1,5 +1,6 @@
 package binarysearch
 
+// SearchInts searches a int in the slice
 func SearchInts(list []int, key int) int {
 	startIdx := 0
 	endIdx := len(list) - 1

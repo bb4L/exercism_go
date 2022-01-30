@@ -11,7 +11,7 @@ import (
 // and io.ByteWriter and can be used (size permitting) as a drop in
 // replacement for anything using that interface.
 
-// Define the Buffer type here.
+// Buffer defintion datastructure
 type Buffer struct {
 	start int
 	end   int
@@ -19,6 +19,7 @@ type Buffer struct {
 	data  []*byte
 }
 
+// NewBuffer returns a new buffer
 func NewBuffer(size int) *Buffer {
 	return &Buffer{
 		start: 0,
@@ -28,6 +29,7 @@ func NewBuffer(size int) *Buffer {
 	}
 }
 
+// ReadByte read a byte from the buffer
 func (b *Buffer) ReadByte() (byte, error) {
 	returnByte := b.data[b.start]
 	if returnByte == nil {
@@ -41,6 +43,7 @@ func (b *Buffer) ReadByte() (byte, error) {
 	return *returnByte, nil
 }
 
+// WriteByte writes a byte to the buffer
 func (b *Buffer) WriteByte(c byte) error {
 	if b.data[b.end] != nil {
 		newEnd := (b.end + 1) % b.size
@@ -55,6 +58,7 @@ func (b *Buffer) WriteByte(c byte) error {
 	return nil
 }
 
+// Overwrite overwrites if the buffer is full
 func (b *Buffer) Overwrite(c byte) {
 	err := b.WriteByte(c)
 	if err != nil {
@@ -64,6 +68,7 @@ func (b *Buffer) Overwrite(c byte) {
 	}
 }
 
+// Reset resets the buffer
 func (b *Buffer) Reset() {
 	b.data = make([]*byte, len(b.data))
 	b.start = 0

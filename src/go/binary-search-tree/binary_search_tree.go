@@ -5,6 +5,7 @@
 // https://golang.org/doc/effective_go.html#commentary
 package binarysearchtree
 
+// SearchTreeData is a node of the searchtree
 type SearchTreeData struct {
 	left  *SearchTreeData
 	data  int

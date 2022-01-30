@@ -27,12 +27,12 @@ func Word(word string) string {
 		if word[index-1:index+1] == "qu" || (index == 1 && word[index-1:index] == "y") {
 			index = strings.IndexAny(word, "aeio")
 		}
-		return word[index:len(word)] + word[:index] + "ay"
+		return word[index:] + word[:index] + "ay"
 	}
 
 	index = strings.Index(word, "y")
 	if index > 0 {
-		return word[index:len(word)] + word[:index] + "ay"
+		return word[index:] + word[:index] + "ay"
 
 	}
 
