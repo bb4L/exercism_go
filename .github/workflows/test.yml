@@ -22,7 +22,7 @@ jobs:
           go-version: 1.17
 
       - name: Build test programm
-        run: go build src/testing.go -o src/testing
+        run: go build -o src/ src/testing.go
 
       - name: Make script executable
         run: chmod +x ./test_all.sh
