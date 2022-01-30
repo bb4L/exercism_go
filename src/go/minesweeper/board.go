@@ -2,6 +2,7 @@ package minesweeper
 
 import "bytes"
 
+// Board for minesweeper
 type Board [][]byte
 
 func (b Board) String() string {

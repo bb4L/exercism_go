@@ -6,7 +6,7 @@ func Sieve(limit int) (result []int) {
 	min := 2
 
 	for i := 2; i <= limit; i++ {
-		if vals[i-min] == false {
+		if !vals[i-min] {
 			result = append(result, i)
 		}
 		if 2*i > limit {

@@ -5,8 +5,7 @@ import (
 	"fmt"
 )
 
-// See types.go for the types defined for this exercise.
-
+// The SillyNephewError describes errors made by the nephew
 type SillyNephewError struct {
 	cows int
 }
@@ -30,10 +29,12 @@ func DivideFood(weightFodder WeightFodder, cows int) (float64, error) {
 
 	}
 	if amount < 0 {
+		//lint:ignore ST1005 : it's needed for the tests to pass
 		return 0, errors.New("Negative fodder")
 	}
 
 	if cows == 0 {
+		//lint:ignore ST1005 : it's needed for the tests to pass
 		return 0, errors.New("Division by zero")
 	}
 	return amount / float64(cows), nil

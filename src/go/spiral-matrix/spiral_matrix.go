@@ -1,19 +1,20 @@
 package spiralmatrix
 
-type Position struct {
+type position struct {
 	Row int
 	Col int
 }
 
-type Direction int
+type direction int
 
 const (
-	Right Direction = iota
-	Down
-	Left
-	Up
+	right direction = iota
+	down
+	left
+	up
 )
 
+// SpiralMatrix returns e spiral matrix with the given size
 func SpiralMatrix(size int) (result [][]int) {
 
 	result = make([][]int, size)
@@ -22,13 +23,13 @@ func SpiralMatrix(size int) (result [][]int) {
 	}
 
 	count := 1
-	pos := Position{0, 0}
+	pos := position{0, 0}
 	if size > 0 {
 		result[0][0] = 1
 	}
 
 	for i := size; i > 0; i -= 2 {
-		for _, direction := range []Direction{Right, Down, Left, Up} {
+		for _, direction := range []direction{right, down, left, up} {
 			for k := 0; k < i-1; k++ {
 				if count > size*size {
 					break
@@ -36,8 +37,8 @@ func SpiralMatrix(size int) (result [][]int) {
 
 				result[pos.Row][pos.Col] = count
 
-				if direction == Up && IntAbs(i-k-1) == 1 {
-					pos.Col += 1
+				if direction == up && IntAbs(i-k-1) == 1 {
+					pos.Col++
 					if size%2 != 0 {
 						result[pos.Row][pos.Col] = 1 + count
 					}
@@ -45,14 +46,14 @@ func SpiralMatrix(size int) (result [][]int) {
 					break
 				}
 				switch direction {
-				case Right:
-					pos.Col += 1
-				case Down:
-					pos.Row += 1
-				case Left:
-					pos.Col -= 1
-				case Up:
-					pos.Row -= 1
+				case right:
+					pos.Col++
+				case down:
+					pos.Row++
+				case left:
+					pos.Col--
+				case up:
+					pos.Row--
 				}
 				count++
 			}

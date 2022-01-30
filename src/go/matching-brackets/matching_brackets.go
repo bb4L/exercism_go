@@ -1,5 +1,6 @@
 package brackets
 
+// Bracket returns if all the brackets are matching
 func Bracket(data string) bool {
 	brackets := []rune{}
 

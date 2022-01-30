@@ -7,6 +7,7 @@ var description = []string{"", "It wriggled and jiggled and tickled inside her."
 	"How absurd to swallow a bird!", "Imagine that, to swallow a cat!", "What a hog, to swallow a dog!",
 	"Just opened her throat and swallowed a goat!", "I don't know how she swallowed a cow!", ""}
 
+// Verse returns the verse
 func Verse(v int) string {
 	var builder strings.Builder
 	internalVerse(&builder, v)
@@ -48,6 +49,7 @@ func getEnding(v int) string {
 	return "I don't know why she swallowed the fly. Perhaps she'll die."
 }
 
+// Verses returns a range of verses
 func Verses(start, end int) string {
 	var builder strings.Builder
 	for i := start; i <= end; i++ {
@@ -59,6 +61,7 @@ func Verses(start, end int) string {
 	return builder.String()
 }
 
+// Song gives the whole song
 func Song() string {
 	return Verses(1, 8)
 }

@@ -5,6 +5,7 @@ import (
 	"unicode/utf8"
 )
 
+// Encode the cypher
 func Encode(message string, rails int) string {
 	var builders = make([]string, rails)
 	line := 0
@@ -23,6 +24,7 @@ func Encode(message string, rails int) string {
 	return strings.Join(builders, "")
 }
 
+// Decode a message
 func Decode(message string, rails int) string {
 	line := 0
 	change := 1

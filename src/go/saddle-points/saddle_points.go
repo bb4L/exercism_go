@@ -5,12 +5,15 @@ import (
 	"strings"
 )
 
-// Define the Matrix and Pair types here.
+// Matrix holding the data of the matrix
 type Matrix struct {
 	data [][]int
 }
+
+// Pair of 2 int
 type Pair [2]int
 
+// New creates a new matrix from string
 func New(s string) (*Matrix, error) {
 	m := Matrix{}
 
@@ -30,6 +33,7 @@ func New(s string) (*Matrix, error) {
 	return &m, nil
 }
 
+// Saddle returns the saddle points
 func (m *Matrix) Saddle() []Pair {
 	maxVals := [][]int{}
 	saddlePoints := []Pair{}

@@ -9,6 +9,7 @@ var steps = []string{"house that Jack built", "malt", "rat", "cat", "dog", "cow 
 var addendum = []string{"lay in", "ate", "killed", "worried", "tossed", "milked", "kissed",
 	"married", "woke", "kept", "belonged to"}
 
+// Verse return a verse
 func Verse(v int) string {
 	var sb strings.Builder
 	sb.WriteString("This is the ")
@@ -27,6 +28,7 @@ func Verse(v int) string {
 	return sb.String()
 }
 
+// Song gives the whole song
 func Song() string {
 	var sb strings.Builder
 	for i := 1; i < 13; i++ {

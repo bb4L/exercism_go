@@ -7,6 +7,7 @@ import (
 
 var errBadFormat = errors.New("bad format")
 
+// Count adds the bomb counts for all the fields
 func (board Board) Count() error {
 	lenghtLine := len(board[0])
 

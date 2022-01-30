@@ -7,7 +7,7 @@ import (
 // Square return value on field n
 func Square(n int) (uint64, error) {
 	if n < 1 || n > 64 {
-		return uint64(0), errors.New("Wrong input should be in range 1 to 64 including")
+		return uint64(0), errors.New("wrong input should be in range 1 to 64 including")
 	}
 	return uint64(1 << (n - 1)), nil
 }

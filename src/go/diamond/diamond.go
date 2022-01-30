@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// Gen generates a diamond
 func Gen(b byte) (string, error) {
 	if b < byte('A') || b > byte('Z') {
 		return "", errors.New("invalid character")

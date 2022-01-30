@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// CanQueenAttack returns a bool if two queens can attack
 func CanQueenAttack(q1, q2 string) (bool, error) {
 	if q1 == q2 {
 		return false, errors.New("same position")

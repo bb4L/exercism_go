@@ -6,7 +6,7 @@ type Relation struct {
 	action string
 }
 
-var mapping = []Relation{Relation{1, "wink"}, Relation{2, "double blink"}, Relation{4, "close your eyes"}, Relation{8, "jump"}}
+var mapping = []Relation{{1, "wink"}, {2, "double blink"}, {4, "close your eyes"}, {8, "jump"}}
 
 // Handshake returns the handshake for a given code
 func Handshake(code uint) (result []string) {

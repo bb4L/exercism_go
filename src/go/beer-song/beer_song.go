@@ -6,11 +6,13 @@ import (
 	"strings"
 )
 
+// Song returns the full song
 func Song() string {
 	res, _ := Verses(99, 0)
 	return res
 }
 
+// Verses gives the verses from start to stop
 func Verses(start, stop int) (string, error) {
 	if start < stop {
 		return "", errors.New("start needs to be higher than stop")
@@ -42,6 +44,7 @@ var secondStrings = []string{
 	"Take one down and pass it around, %d bottles of beer on the wall.",
 }
 
+// Verse returns one verse
 func Verse(n int) (string, error) {
 	if n > 100 || n < 0 {
 		return "", errors.New("invalid verse number")

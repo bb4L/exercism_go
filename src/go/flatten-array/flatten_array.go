@@ -15,7 +15,7 @@ func Flatten(data interface{}) []interface{} {
 		rt := reflect.TypeOf(d)
 		switch rt.Kind() {
 		case reflect.Slice:
-			res := Flatten(d.(interface{}))
+			res := Flatten(d)
 			if len(res) == 0 {
 				continue
 			}

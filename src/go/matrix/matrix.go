@@ -17,13 +17,13 @@ func New(input string) (Matrix, error) {
 		newRow := []int{}
 		vals := strings.Split(strings.TrimSpace(row), " ")
 		if rowlen > 0 && len(vals) != rowlen {
-			return nil, errors.New("Rows don't have the same length")
+			return nil, errors.New("rows don't have the same length")
 		}
 		rowlen = len(vals)
 		for _, val := range vals {
 			newVal, err := strconv.Atoi(val)
 			if err != nil {
-				return nil, errors.New("Could not parse all values")
+				return nil, errors.New("could not parse all values")
 			}
 			newRow = append(newRow, newVal)
 		}
@@ -37,11 +37,7 @@ func New(input string) (Matrix, error) {
 func (m Matrix) Rows() [][]int {
 	result := [][]int{}
 	for _, row := range m {
-		newRow := []int{}
-		for _, val := range row {
-			newRow = append(newRow, val)
-		}
-		result = append(result, newRow)
+		result = append(result, append([]int{}, row...))
 	}
 	return result
 }
