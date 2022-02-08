@@ -26,13 +26,13 @@ func (d Dir) String() string {
 func Advance() {
 	switch Step1Robot.Dir {
 	case N:
-		Step1Robot.Y += 1
+		Step1Robot.Y++
 	case S:
-		Step1Robot.Y -= 1
+		Step1Robot.Y--
 	case E:
-		Step1Robot.X += 1
+		Step1Robot.X++
 	case W:
-		Step1Robot.X -= 1
+		Step1Robot.X--
 	}
 }
 
@@ -79,15 +79,13 @@ func (robot *Step2Robot) DoAction(a Action, rect Rect) {
 		y := robot.Pos.Northing
 		switch robot.Dir {
 		case N:
-			y += 1
+			y++
 		case S:
-			y -= 1
-
+			y--
 		case E:
-			x += 1
+			x++
 		case W:
-			x -= 1
-
+			x--
 		}
 		if (x <= rect.Max.Easting && x >= rect.Min.Easting) && (y <= rect.Max.Northing && y >= rect.Min.Northing) {
 			robot.Pos.Northing = y
@@ -145,52 +143,45 @@ func Room3(rect Rect, robots []Step3Robot, act chan Action3, rep chan []Step3Rob
 				}
 				rep <- step3Robots
 				return
-			} else {
-				continue
 			}
-		}
+		} else {
+			robot, ok := robotMap[action.Name]
+			if !ok {
+				log <- "cmd for unknown robot"
+				rep <- step3Robots
+				return
+			}
 
-		robot, ok := robotMap[action.Name]
-		if !ok {
-			log <- "cmd for unknown robot"
-			rep <- step3Robots
-			return
-		}
+			actualAction := action.Action
+			if actualAction != 'R' && actualAction != 'L' && actualAction != 'A' {
+				log <- "invalid command"
+				rep <- robots
+				return
+			}
 
-		oldPos := robot.Step2Robot.Pos
+			oldPos := robot.Step2Robot.Pos
+			robot.Step2Robot.DoAction(action.Action, rect)
 
-		actualAction := action.Action
-		if actualAction != 'R' && actualAction != 'L' && actualAction != 'A' {
-			log <- "invalid command"
-			rep <- robots
-			return
-		}
-
-		robot.Step2Robot.DoAction(action.Action, rect)
-		if oldPos.Northing == robot.Step2Robot.Pos.Northing && oldPos.Easting == robot.Step2Robot.Pos.Easting && action.Action == 'A' {
-			robot.Step2Robot.Pos = oldPos
-			robotMap[action.Name] = robot
-			log <- "bounced from wall"
-			continue
-		}
-
-		if oldPos != robot.Step2Robot.Pos {
-			if _, ok := positions[robot.Step2Robot.Pos]; ok {
-				log <- "bumping into other robot"
+			if oldPos.Northing == robot.Step2Robot.Pos.Northing && oldPos.Easting == robot.Step2Robot.Pos.Easting && action.Action == 'A' {
 				robot.Step2Robot.Pos = oldPos
 				robotMap[action.Name] = robot
-				continue
+				log <- "bounced from wall"
 			}
 
-			delete(positions, oldPos)
-			positions[robot.Step2Robot.Pos] = true
+			if oldPos != robot.Step2Robot.Pos {
+				if _, ok := positions[robot.Step2Robot.Pos]; ok {
+					log <- "bumping into other robot"
+					robot.Step2Robot.Pos = oldPos
+					robotMap[action.Name] = robot
+				} else {
+					delete(positions, oldPos)
+					positions[robot.Step2Robot.Pos] = true
+				}
+			}
 
+			robotMap[action.Name] = robot
 		}
-
-		robotMap[action.Name] = robot
-
 	}
-
 }
 
 func StartRobot3(name, script string, action chan Action3, log chan string) {
