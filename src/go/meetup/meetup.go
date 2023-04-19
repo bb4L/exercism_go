@@ -14,7 +14,7 @@ var Second = WeekSchedule(2)
 // Third indicates looking for the third
 var Third = WeekSchedule(3)
 
-//Fourth indicates looking for the fourth
+// Fourth indicates looking for the fourth
 var Fourth = WeekSchedule(4)
 
 // Last indicates lookinf for the last

@@ -6,7 +6,8 @@ import (
 
 // newChessboard return a *Chessboard for tests
 //
-//   1 2 3 4 5 6 7 8
+//	1 2 3 4 5 6 7 8
+//
 // A # _ # _ _ _ _ # A
 // B _ _ _ _ # _ _ _ B
 // C _ _ # _ _ _ _ _ C
@@ -15,7 +16,8 @@ import (
 // F _ _ _ _ _ _ _ _ F
 // G _ _ _ # _ _ _ _ G
 // H # # # # # # _ # H
-//   1 2 3 4 5 6 7 8
+//
+//	1 2 3 4 5 6 7 8
 func newChessboard() Chessboard {
 	return Chessboard{
 		"A": Rank{true, false, true, false, false, false, false, true},
