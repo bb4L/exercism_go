@@ -1,4 +1,4 @@
-ARG VARIANT="1.17-bullseye"
+ARG VARIANT="1.19-bullseye"
 
 FROM mcr.microsoft.com/vscode/devcontainers/go:0-${VARIANT}
 
